@@ -1,0 +1,115 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import Deck from '../../components/Deck.astro';
+import Hairline from '../../components/Hairline.astro';
+import Figure from '../../components/Figure.astro';
+
+const order = ['the-kinampay', 'kulay-lilang-ginto', 'toji-highball', 'kochi-spritz', 'rikyu-sour', 'uji-tonic'];
+const allRecipes = await getCollection('recipes');
+const recipes = order.map((slug) => allRecipes.find((r) => r.data.slug === slug)!);
+
+const accentText = {
+	ube: 'text-ube',
+	yuzu: 'text-yuzu',
+	matcha: 'text-matcha',
+};
+
+const ingredientLabel = {
+	ube: 'Ube',
+	yuzu: 'Yuzu',
+	matcha: 'Matcha',
+};
+---
+
+<BaseLayout title="Recipes" description="Six cocktails built from ube, yuzu and matcha. Three with alcohol, three zero proof.">
+	<section class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>Recipes</Eyebrow>
+			<PageTitle>Six cocktails</PageTitle>
+			<Deck>Three with alcohol, three zero proof. Each one specified, tasted and annotated with what actually happened in the glass.</Deck>
+		</header>
+
+		<Hairline />
+
+		<div class="filters flex flex-wrap gap-x-10 gap-y-6">
+			<fieldset class="flex flex-col gap-2">
+				<legend class="font-label text-xs text-mist mb-1">Ingredient</legend>
+				<div class="flex flex-wrap gap-2">
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="ingredient" id="ing-all" checked class="sr-only" />
+						All
+					</label>
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="ingredient" id="ing-ube" class="sr-only" />
+						Ube
+					</label>
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="ingredient" id="ing-yuzu" class="sr-only" />
+						Yuzu
+					</label>
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="ingredient" id="ing-matcha" class="sr-only" />
+						Matcha
+					</label>
+				</div>
+			</fieldset>
+
+			<fieldset class="flex flex-col gap-2">
+				<legend class="font-label text-xs text-mist mb-1">Type</legend>
+				<div class="flex flex-wrap gap-2">
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="type" id="type-all" checked class="sr-only" />
+						All
+					</label>
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="type" id="type-alcoholic" class="sr-only" />
+						With alcohol
+					</label>
+					<label class="font-label text-xs px-3 py-1.5 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass">
+						<input type="radio" name="type" id="type-zero" class="sr-only" />
+						Zero proof
+					</label>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="recipes-grid grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+			{recipes.map((recipe) => (
+				<article data-ingredient={recipe.data.ingredient} data-type={recipe.data.alcoholic ? 'alcoholic' : 'zero-proof'} class="flex flex-col gap-3">
+					<a href={`/recipes/${recipe.data.slug}`}>
+						<Figure src={recipe.data.image} alt={`${recipe.data.name}, plated.`} caption={recipe.data.name} aspect="4:5" />
+					</a>
+					<div class="flex flex-col gap-1">
+						<p class:list={['font-label text-xs', accentText[recipe.data.ingredient]]}>
+							{ingredientLabel[recipe.data.ingredient]} &middot; {recipe.data.alcoholic ? 'With alcohol' : 'Zero proof'}
+						</p>
+						<a href={`/recipes/${recipe.data.slug}`} class="text-lg font-medium text-bone hover:text-brass transition-colors">
+							{recipe.data.name}
+						</a>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.filters:has(#ing-ube:checked) ~ .recipes-grid > [data-ingredient]:not([data-ingredient='ube']) {
+		display: none;
+	}
+	.filters:has(#ing-yuzu:checked) ~ .recipes-grid > [data-ingredient]:not([data-ingredient='yuzu']) {
+		display: none;
+	}
+	.filters:has(#ing-matcha:checked) ~ .recipes-grid > [data-ingredient]:not([data-ingredient='matcha']) {
+		display: none;
+	}
+	.filters:has(#type-alcoholic:checked) ~ .recipes-grid > [data-type]:not([data-type='alcoholic']) {
+		display: none;
+	}
+	.filters:has(#type-zero:checked) ~ .recipes-grid > [data-type]:not([data-type='zero-proof']) {
+		display: none;
+	}
+</style>

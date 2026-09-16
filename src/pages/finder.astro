@@ -1,0 +1,206 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+
+const order = ['the-kinampay', 'kulay-lilang-ginto', 'toji-highball', 'kochi-spritz', 'rikyu-sour', 'uji-tonic'];
+const allRecipes = await getCollection('recipes');
+const recipes = order.map((slug) => allRecipes.find((r) => r.data.slug === slug)!);
+
+const flavorOptions = [
+	{ value: 'ube', label: 'Rich, purple, a little sweet' },
+	{ value: 'yuzu', label: 'Bright, citrus, a little sharp' },
+	{ value: 'matcha', label: 'Green, vegetal, a little bitter' },
+];
+
+const proofOptions = [
+	{ value: 'true', label: 'With alcohol' },
+	{ value: 'false', label: 'Zero proof' },
+];
+
+const occasionOptions = [
+	'A client dinner',
+	'Drinks after work',
+	'A quiet nightcap',
+];
+
+const ingredientLabel = {
+	ube: 'Ube',
+	yuzu: 'Yuzu',
+	matcha: 'Matcha',
+};
+
+const accentText = {
+	ube: 'text-ube',
+	yuzu: 'text-yuzu',
+	matcha: 'text-matcha',
+};
+---
+
+<BaseLayout title="Find your drink" description="Answer three questions and get one recommendation from the six recipes in this book.">
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>Find your drink</Eyebrow>
+			<PageTitle>Three questions, one recommendation</PageTitle>
+			<Deck>
+				Answer honestly. The match comes from the same six recipes in this book, nothing invented.
+			</Deck>
+		</header>
+
+		<Hairline />
+
+		<div id="finder-app" class="max-w-2xl flex flex-col gap-10">
+			<form id="finder-form" class="flex flex-col gap-10">
+				<fieldset class="flex flex-col gap-3">
+					<legend class="font-label text-xs text-mist mb-1">Flavor direction</legend>
+					<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+						{flavorOptions.map((opt, i) => (
+							<label class="font-label text-xs px-4 py-3 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brass has-[:focus-visible]:outline-offset-2 sm:flex-1">
+								<input type="radio" name="flavor" value={opt.value} required checked={i === 0} class="sr-only" />
+								{opt.label}
+							</label>
+						))}
+					</div>
+				</fieldset>
+
+				<fieldset class="flex flex-col gap-3">
+					<legend class="font-label text-xs text-mist mb-1">Alcoholic or zero proof</legend>
+					<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+						{proofOptions.map((opt, i) => (
+							<label class="font-label text-xs px-4 py-3 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brass has-[:focus-visible]:outline-offset-2 sm:flex-1">
+								<input type="radio" name="alcoholic" value={opt.value} required checked={i === 0} class="sr-only" />
+								{opt.label}
+							</label>
+						))}
+					</div>
+				</fieldset>
+
+				<fieldset class="flex flex-col gap-3">
+					<legend class="font-label text-xs text-mist mb-1">Occasion</legend>
+					<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+						{occasionOptions.map((opt, i) => (
+							<label class="font-label text-xs px-4 py-3 border border-rule text-ash cursor-pointer transition-colors has-[:checked]:border-brass has-[:checked]:text-brass has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brass has-[:focus-visible]:outline-offset-2 sm:flex-1">
+								<input type="radio" name="occasion" value={opt} required checked={i === 0} class="sr-only" />
+								{opt}
+							</label>
+						))}
+					</div>
+				</fieldset>
+
+				<div>
+					<button
+						type="submit"
+						class="font-label text-xs px-6 py-3 border border-brass text-brass hover:bg-brass hover:text-slate transition-colors"
+					>
+						Find my drink
+					</button>
+				</div>
+			</form>
+
+			<div id="finder-status" class="text-sm text-ash" role="status" aria-live="polite"></div>
+
+			<div id="finder-result" class="hidden flex-col gap-4 border-l-[3px] border-brass bg-stone px-6 py-6" data-accent="">
+				<p id="result-eyebrow" class="font-label text-xs"></p>
+				<a id="result-name" href="#" class="text-2xl font-medium text-bone hover:text-brass transition-colors"></a>
+				<p id="result-reason" class="text-base leading-relaxed text-ash"></p>
+				<a id="result-link" href="#" class="font-label text-xs text-brass hover:opacity-75 transition-opacity mt-2">
+					See the full recipe &rarr;
+				</a>
+			</div>
+		</div>
+
+		<noscript>
+			<Hairline />
+			<div class="max-w-3xl flex flex-col gap-8">
+				<h2 class="font-label text-xs text-mist">The matrix, without JavaScript</h2>
+				<table class="w-full text-left border-collapse">
+					<thead>
+						<tr class="border-b border-rule">
+							<th class="py-3 pr-4 font-label text-xs text-mist font-medium"></th>
+							<th class="py-3 px-4 font-label text-xs text-mist font-medium">With alcohol</th>
+							<th class="py-3 pl-4 font-label text-xs text-mist font-medium">Zero proof</th>
+						</tr>
+					</thead>
+					<tbody>
+						{(['ube', 'yuzu', 'matcha'] as const).map((ingredient) => (
+							<tr class="border-b border-rule">
+								<th scope="row" class:list={['py-4 pr-4 font-label text-xs font-normal text-left align-top', accentText[ingredient]]}>
+									{ingredientLabel[ingredient]}
+								</th>
+								{recipes
+									.filter((r) => r.data.ingredient === ingredient)
+									.sort((a, b) => (b.data.alcoholic ? 1 : 0) - (a.data.alcoholic ? 1 : 0))
+									.map((r) => (
+										<td class="py-4 px-4 text-sm align-top">
+											<a href={`/recipes/${r.data.slug}`} class="text-bone hover:text-brass transition-colors">{r.data.name}</a>
+										</td>
+									))}
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</noscript>
+	</article>
+</BaseLayout>
+
+<script
+	define:vars={{
+		recipeData: recipes.map((r) => ({
+			slug: r.data.slug,
+			name: r.data.name,
+			ingredient: r.data.ingredient,
+			alcoholic: r.data.alcoholic,
+			tagline: r.data.tagline,
+		})),
+	}}
+>
+	window.__recipeData = recipeData;
+</script>
+
+<script>
+	// The match is deterministic: first recipe whose ingredient and alcoholic
+	// flag match the answers given, same rule the site has always used as its
+	// baseline match. Runs entirely client-side, no server or API key involved.
+	const form = document.getElementById('finder-form') as HTMLFormElement;
+	const status = document.getElementById('finder-status') as HTMLElement;
+	const result = document.getElementById('finder-result') as HTMLElement;
+	const resultEyebrow = document.getElementById('result-eyebrow') as HTMLElement;
+	const resultName = document.getElementById('result-name') as HTMLAnchorElement;
+	const resultReason = document.getElementById('result-reason') as HTMLElement;
+	const resultLink = document.getElementById('result-link') as HTMLAnchorElement;
+
+	const ingredientLabel: Record<string, string> = { ube: 'Ube', yuzu: 'Yuzu', matcha: 'Matcha' };
+	const accentClass: Record<string, string> = { ube: 'text-ube', yuzu: 'text-yuzu', matcha: 'text-matcha' };
+
+	type RecipeMeta = { slug: string; name: string; ingredient: string; alcoholic: boolean; tagline: string };
+	const recipeData: RecipeMeta[] = (window as unknown as { __recipeData: RecipeMeta[] }).__recipeData ?? [];
+
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const data = new FormData(form);
+		const flavor = data.get('flavor');
+		const alcoholic = data.get('alcoholic') === 'true';
+
+		result.classList.add('hidden');
+
+		const recipe = recipeData.find((r) => r.ingredient === flavor && r.alcoholic === alcoholic);
+		if (!recipe) {
+			status.textContent = 'Something went wrong. Please try again.';
+			return;
+		}
+
+		status.textContent = '';
+		resultEyebrow.textContent = ingredientLabel[recipe.ingredient] ?? '';
+		resultEyebrow.className = `font-label text-xs ${accentClass[recipe.ingredient] ?? ''}`;
+		resultName.textContent = recipe.name;
+		resultName.href = `/recipes/${recipe.slug}`;
+		resultReason.textContent = recipe.tagline;
+		resultLink.href = `/recipes/${recipe.slug}`;
+		result.classList.remove('hidden');
+		result.classList.add('flex');
+	});
+</script>

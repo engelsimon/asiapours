@@ -1,0 +1,69 @@
+---
+interface Props {
+	build: { amount: string; item: string }[];
+}
+
+const { build } = Astro.props;
+---
+
+<div class="servings-scaler flex flex-col gap-4">
+	<div class="flex items-center gap-3">
+		<label for="servings" class="font-label text-xs text-mist">Servings</label>
+		<select id="servings" class="bg-stone border border-rule text-bone px-2 py-1 font-label text-xs">
+			{[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+				<option value={n} selected={n === 1}>
+					{n}
+				</option>
+			))}
+		</select>
+	</div>
+	<ul class="build-list flex flex-col gap-2">
+		{build.map((row) => (
+			<li data-base-amount={row.amount} class="flex gap-3 text-base leading-relaxed">
+				<span class="amount w-24 shrink-0 tabular-nums text-bone">{row.amount}</span>
+				<span class="item text-ash">{row.item}</span>
+			</li>
+		))}
+	</ul>
+</div>
+
+<script>
+	function roundAmount(value: number, unit: string | undefined): number {
+		if (unit === 'ml') return Math.round(value / 5) * 5;
+		if (unit === 'g') return Math.round(value * 2) / 2;
+		return Math.max(1, Math.round(value));
+	}
+
+	function initScaler(root: Element) {
+		const select = root.querySelector<HTMLSelectElement>('#servings');
+		const items = root.querySelectorAll<HTMLLIElement>('.build-list li');
+		if (!select) return;
+
+		function update() {
+			const servings = Number(select!.value);
+			items.forEach((li) => {
+				const base = li.dataset.baseAmount ?? '';
+				const amountEl = li.querySelector('.amount');
+				const match = base.match(/^([\d.]+)\s*(ml|g)?\s*(.*)$/);
+				if (!match || !amountEl) return;
+
+				const num = parseFloat(match[1]);
+				const unit = match[2];
+				const rest = match[3];
+
+				if (Number.isNaN(num)) {
+					amountEl.textContent = base;
+					return;
+				}
+
+				const rounded = roundAmount(num * servings, unit);
+				const display = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+				amountEl.textContent = unit ? `${display} ${unit}` : rest ? `${display} ${rest}` : display;
+			});
+		}
+
+		select.addEventListener('change', update);
+	}
+
+	document.querySelectorAll('.servings-scaler').forEach(initScaler);
+</script>

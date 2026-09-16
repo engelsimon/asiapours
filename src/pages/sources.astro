@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+import Callout from '../components/Callout.astro';
+
+interface Source {
+	id: string;
+	citation: string;
+	url?: string;
+}
+
+const groups: { label: string; accent: 'ube' | 'yuzu' | 'matcha' | 'brass'; sources: Source[] }[] = [
+	{
+		label: 'Ube',
+		accent: 'ube',
+		sources: [
+			{
+				id: 'coherent-market-insights-2026',
+				citation: 'Coherent Market Insights. (2026, June 8). Ube market size, opportunities and YoY growth rate, 2033.',
+				url: 'https://www.coherentmarketinsights.com/industry-reports/ube-market',
+			},
+			{
+				id: 'cros-et-al-2020',
+				citation:
+					'Cros, J., Mahe, P., Nemorin, A., Maledon, E., Abraham, K., & Arnau, G. (2020). Genome-wide genotyping elucidates the geographical diversification and dispersal of the polyploid and clonally propagated yam (Dioscorea alata). Frontiers in Plant Science.',
+			},
+			{
+				id: 'inquirer-business-2026',
+				citation: "Inquirer Business. (2026, March 1). Ube's global appeal takes root.",
+				url: 'https://business.inquirer.net/576736/ubes-global-appeal-takes-root',
+			},
+			{
+				id: 'ladrido-2026',
+				citation: 'Ladrido, R. C. (2026, July 3). Know your Philippine ube: History, culture, and identity. VERA Files.',
+				url: 'https://verafiles.org/articles/know-your-philippine-ube-history-culture-and-identity',
+			},
+			{
+				id: 'matcharista-nd',
+				citation: 'Matcharista. (2026). Ube shop: Lila Yam Pulver.',
+				url: 'https://matcharista.ch/shop-ube.html',
+			},
+			{
+				id: 'moriya-et-al-2015',
+				citation:
+					'Moriya, C., et al. (2015). New acylated anthocyanins from purple yam and their antioxidant activity. Bioscience, Biotechnology, and Biochemistry.',
+			},
+			{
+				id: 'nemorin-et-al-2013',
+				citation:
+					'Nemorin, A., David, J., Maledon, E., Nudol, E., Dalon, J., & Arnau, G. (2013). Microsatellite and flow cytometry analysis to help understand the origin of Dioscorea alata polyploids. Annals of Botany, 112(5), 1069-1081.',
+			},
+			{
+				id: 'philippine-root-crop-research-2026',
+				citation:
+					'Philippine Root Crop Research and Training Center, Visayas State University. (2026, July 1). An ube story: The Philippines\' purple gold.',
+			},
+			{
+				id: 'philippine-statistics-authority-2026',
+				citation:
+					'Philippine Statistics Authority. (2026). Ube production and export data, cited in CNBC (2026, April 26) and Philstar (2026, May 18).',
+			},
+			{
+				id: 'transparency-market-research-2025',
+				citation: 'Transparency Market Research. (2025, December 17). Ube market size, share and growth forecast 2035.',
+			},
+			{
+				id: 'usda-fas-2026',
+				citation: 'USDA Foreign Agricultural Service. (2026, June). Philippines: Ube, purple yam. GAIN Report.',
+			},
+		],
+	},
+	{
+		label: 'Yuzu',
+		accent: 'yuzu',
+		sources: [
+			{
+				id: 'dksh-japan-2024',
+				citation: "DKSH Japan. (2024, November 15). DKSH Japan supports yuzu harvest in Kochi Prefecture, exploring yuzu's global potential.",
+			},
+			{
+				id: 'jetro-nd',
+				citation: 'Japan External Trade Organization (JETRO). (n.d.). Yuzu: Highlighted Japanese ingredients.',
+			},
+			{
+				id: 'nippon-com-2026',
+				citation: "Nippon.com. (2026, January 18). Europe embraces the Japanese citron: One village's yuzu crusade.",
+				url: 'https://www.nippon.com/en/views/b06005/',
+			},
+			{
+				id: 'uc-riverside-2023',
+				citation: 'UC Riverside Citrus Variety Collection. (2023). Yuzu ichandrin (papeda hybrid): Citrus junos Sieb. ex Tanaka. CRC Accession 1216.',
+			},
+		],
+	},
+	{
+		label: 'Matcha',
+		accent: 'matcha',
+		sources: [
+			{
+				id: 'first-agri-b2b-2026-wholesale',
+				citation: "First Agri B2B. (2026). Matcha wholesale 2026: The complete B2B buyer's guide to sourcing from Japan.",
+				url: 'https://first-agri.jp/matcha/columns/040',
+			},
+			{
+				id: 'first-agri-b2b-2026-uji',
+				citation: "First Agri B2B. (2026, February 19). Uji matcha: Why Kyoto's tea region produces the world's finest matcha.",
+			},
+			{
+				id: 'global-japanese-tea-association-2025',
+				citation: 'Global Japanese Tea Association. (2025, May). Japanese tea report: Kyoto opening tencha auction.',
+			},
+			{
+				id: 'grand-view-research-2026',
+				citation: 'Grand View Research. (2026, June 24). Matcha market size, share and growth report, 2026-2033.',
+			},
+			{
+				id: 'maison-genkai-2026',
+				citation: 'Maison Genkai. (2026, May). Best matcha in Switzerland 2026: Honest buying guide.',
+				url: 'https://maisongenkai.ch/en/blog/best-matcha-in-switzerland-why-its-so-hard-to-find',
+			},
+			{
+				id: 'maison-koko-2026-shading',
+				citation: 'Maison Koko. (2026, June 4). Traditional matcha shading: Honzu, tana-gake and why it matters.',
+			},
+			{
+				id: 'maison-koko-2026-shortage',
+				citation: 'Maison Koko. (2026, June 24). Matcha shortage 2026: Causes, prices and how to buy real matcha.',
+			},
+			{
+				id: 'matcharonin-2025',
+				citation: 'Matcharonin. (2025, October 19). Matcha kaufen Schweiz: Die besten Quellen und Tipps (2026).',
+			},
+			{
+				id: 'matchaland-2026',
+				citation: 'MatchaLand. (2026). Der beste Matcha der Schweiz.',
+				url: 'https://matchaland.ch/en/collections/der-beste-matcha-der-schweiz',
+			},
+			{
+				id: 'one-with-tea-2026-shortage',
+				citation: "One With Tea. (2026, June 15). The 2026 matcha shortage explained: A founder's view from the sourcing floor.",
+				url: 'https://onewithtea.com/blogs/news/2026-matcha-shortage-explained',
+			},
+			{
+				id: 'one-with-tea-2026-industry',
+				citation: 'One With Tea. (2026, July 2). Matcha industry 2026: Record auctions and the shortage.',
+			},
+			{
+				id: 'perfect-daily-grind-2026',
+				citation: "Perfect Daily Grind. (2026, January 2). There's a matcha shortage in Japan: Where else can it grow?",
+			},
+			{
+				id: 'senbird-tea-2026',
+				citation: 'Senbird Tea. (2026, April 14). A guide to the history of matcha tea ceremonies.',
+			},
+			{
+				id: 'wikipedia-shade-cultivation-2026',
+				citation: 'Wikipedia contributors. (2026). Shade cultivation of tea. Wikipedia.',
+			},
+			{
+				id: 'yamamasa-koyamaen-nd',
+				citation: 'Yamamasa Koyamaen. (n.d.). History of matcha.',
+			},
+			{
+				id: 'yuri-matcha-2026',
+				citation: 'Yuri Matcha. (2026, June 7). Kagoshima vs Uji matcha supply in 2026.',
+			},
+		],
+	},
+	{
+		label: 'General',
+		accent: 'brass',
+		sources: [
+			{
+				id: 'european-commission-2023',
+				citation:
+					'European Commission, Directorate-General for Agriculture and Rural Development. (2023, September 27). EU-Japan: An additional 42 geographical indications protected for both sides.',
+			},
+			{
+				id: 'eur-lex-nd',
+				citation: 'EUR-Lex. (n.d.). Economic partnership agreement between the EU and Japan. Publications Office of the European Union.',
+			},
+		],
+	},
+];
+---
+
+<BaseLayout title="Sources" description="Full source list for every figure, date and quote used in Asia Pours, grouped by ingredient.">
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>References</Eyebrow>
+			<PageTitle>Sources</PageTitle>
+			<Deck>
+				Figures were checked against the sources below in August 2026. Auction prices, export
+				values and retail prices move. Verify anything time sensitive before quoting it on stage.
+			</Deck>
+		</header>
+
+		<Hairline />
+
+		<Callout label="A note on this list">
+			<p>
+				This list reproduces the reference page printed in the Asia Pours booklet. A separate
+				formal APA source document (Asia_Pours_Sources.docx) was planned for this site but has not
+				yet been supplied. <strong class="text-bone">[VERIFY: needs Asia_Pours_Sources.docx]</strong> If
+				a fuller or corrected source list becomes available, this page should be updated from it
+				rather than from the booklet excerpt.
+			</p>
+		</Callout>
+
+		<div class="flex flex-col gap-12 max-w-3xl">
+			{groups.map((group) => (
+				<section class="flex flex-col gap-4">
+					<h2 class:list={['font-label text-xs', {
+						ube: 'text-ube',
+						yuzu: 'text-yuzu',
+						matcha: 'text-matcha',
+						brass: 'text-brass',
+					}[group.accent]]}>
+						{group.label}
+					</h2>
+					<ol class="flex flex-col gap-4">
+						{group.sources.map((source) => (
+							<li id={source.id} class="text-sm leading-relaxed text-ash scroll-mt-24">
+								{source.citation}
+								{source.url && (
+									<>
+										{' '}
+										<a href={source.url} class="text-steel hover:opacity-75 transition-opacity break-all">
+											{source.url}
+										</a>
+									</>
+								)}
+							</li>
+						))}
+					</ol>
+				</section>
+			))}
+		</div>
+	</article>
+</BaseLayout>

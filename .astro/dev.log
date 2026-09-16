@@ -1,0 +1,197 @@
+{"message":"Enabling sessions with filesystem storage","label":"@astrojs/node","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Generated 1ms","label":"types","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Syncing content","label":"content","level":"info"}
+{"message":"Synced content","label":"content","level":"info"}
+{"message":" astro  v7.2.10 ready in 1328 ms\n┃ Local    http://localhost:4321/\n┃ Network  use --host to expose","label":"SKIP_FORMAT","level":"info"}
+{"message":"watching for file changes...","label":null,"level":"info"}
+{"message":"[200] / 19ms","label":null,"level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 16ms","label":null,"level":"info"}
+{"message":"[200] /finder 37ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /finder 14ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /finder 8ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 18ms","label":null,"level":"info"}
+{"message":"[200] /recipes 18ms","label":null,"level":"info"}
+{"message":"[200] /sources 17ms","label":null,"level":"info"}
+{"message":"[200] /finder 3ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 3ms","label":null,"level":"info"}
+{"message":"[200] / 9ms","label":null,"level":"info"}
+{"message":"[200] / 4ms","label":null,"level":"info"}
+{"message":"[200] /recipes 9ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"[200] /recipes 20ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"[200] /recipes 5ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"Reloaded data from ube.md","label":"glob-loader","level":"info"}
+{"message":"Reloaded data from yuzu.md","label":"glob-loader","level":"info"}
+{"message":"Reloaded data from matcha.md","label":"glob-loader","level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 70ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"src/pages/finder.astro","label":"watch","level":"info"}
+{"message":"[200] /recipes 13ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 9ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 7ms","label":null,"level":"info"}
+{"message":"[200] / 19ms","label":null,"level":"info"}
+{"message":"[404] /robots.txt 2ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 10ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 8ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 11ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 8ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 7ms","label":null,"level":"info"}
+{"message":"Configuration file updated. Restarting...","label":null,"level":"info"}
+{"message":"Enabling sessions with filesystem storage","label":"@astrojs/node","level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Re-optimizing dependencies because vite config has changed","label":"vite","level":"info"}
+{"message":"server restarted.","label":"vite","level":"info"}
+{"message":"[200] /recipes 66ms","label":null,"level":"info"}
+{"message":"Configuration file updated. Restarting...","label":null,"level":"info"}
+{"message":"Enabling sessions with filesystem storage","label":"@astrojs/node","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"server restarted.","label":"vite","level":"info"}
+{"message":"[200] /recipes 47ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"[200] /recipes 11ms","label":null,"level":"info"}
+{"message":"[200] /recipes 15ms","label":null,"level":"info"}
+{"message":"[200] / 12ms","label":null,"level":"info"}
+{"message":"[200] / 9ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 17ms","label":null,"level":"info"}
+{"message":"[200] / 5ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] / 8ms","label":null,"level":"info"}
+{"message":"[200] /recipes 12ms","label":null,"level":"info"}
+{"message":"[200] / 2ms","label":null,"level":"info"}
+{"message":"[200] / 2ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 12ms","label":null,"level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 3ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"[200] /finder 23ms","label":null,"level":"info"}
+{"message":"[200] /sources 15ms","label":null,"level":"info"}
+{"message":"[200] /finder 5ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 18ms","label":null,"level":"info"}
+{"message":"[200] /recipes 20ms","label":null,"level":"info"}
+{"message":"[200] / 18ms","label":null,"level":"info"}
+{"message":"[200] /finder 5ms","label":null,"level":"info"}
+{"message":"[200] /sources 3ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 2ms","label":null,"level":"info"}
+{"message":"[200] /recipes 4ms","label":null,"level":"info"}
+{"message":"[200] / 5ms","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[200] /recipes 4ms","label":null,"level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[console.error] Astro Error while running audit's match function: TypeError: Failed to fetch","label":"vite","level":"error"}
+{"message":"[200] /recipes/the-kinampay 16ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 4ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes 13ms","label":null,"level":"info"}
+{"message":"[200] / 9ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 9ms","label":null,"level":"info"}
+{"message":"[200] / 2ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 4ms","label":null,"level":"info"}
+{"message":"[console.error] Astro Error while running audit's match function: TypeError: Failed to fetch","label":"vite","level":"error"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /recipes/the-kinampay 11ms","label":null,"level":"info"}
+{"message":"[200] /recipes/the-kinampay 6ms","label":null,"level":"info"}
+{"message":"[200] /recipes 9ms","label":null,"level":"info"}
+{"message":"[200] / 7ms","label":null,"level":"info"}
+{"message":"[200] / 3ms","label":null,"level":"info"}
+{"message":"[200] / 8ms","label":null,"level":"info"}
+{"message":"[200] /recipes 8ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 13ms","label":null,"level":"info"}
+{"message":"[200] /sources 8ms","label":null,"level":"info"}
+{"message":"[200] /sources 4ms","label":null,"level":"info"}
+{"message":"[200] /finder 14ms","label":null,"level":"info"}
+{"message":"[200] /sources 6ms","label":null,"level":"info"}
+{"message":"[200] /about 21ms","label":null,"level":"info"}
+{"message":"[200] /finder 21ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 1ms","label":null,"level":"info"}
+{"message":"[200] /finder 17ms","label":null,"level":"info"}
+{"message":"[200] /recipes 6ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 5ms","label":null,"level":"info"}
+{"message":"[200] /finder 28ms","label":null,"level":"info"}
+{"message":"[200] / 6ms","label":null,"level":"info"}
+{"message":"[200] / 20ms","label":null,"level":"info"}
+{"message":"[200] / 16ms","label":null,"level":"info"}
+{"message":"[200] / 13ms","label":null,"level":"info"}
+{"message":"[200] / 41ms","label":null,"level":"info"}
+{"message":"[200] / 20ms","label":null,"level":"info"}
+{"message":"[200] / 19ms","label":null,"level":"info"}
+{"message":"[200] /recipes 13ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 8ms","label":null,"level":"info"}
+{"message":"[200] /sources 11ms","label":null,"level":"info"}
+{"message":"[200] /finder 17ms","label":null,"level":"info"}
+{"message":"[200] / 92ms","label":null,"level":"info"}
+{"message":"[200] / 11ms","label":null,"level":"info"}
+{"message":"[200] /recipes 21ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 3ms","label":null,"level":"info"}
+{"message":"[200] /sources 5ms","label":null,"level":"info"}
+{"message":"[200] /finder 17ms","label":null,"level":"info"}
+{"message":"[200] /finder 12ms","label":null,"level":"info"}
+{"message":"[200] /finder 82ms","label":null,"level":"info"}
+{"message":"[200] / 14ms","label":null,"level":"info"}
+{"message":"[200] /recipes 6ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 2ms","label":null,"level":"info"}
+{"message":"[200] / 50ms","label":null,"level":"info"}
+{"message":"[200] /the-argument 24ms","label":null,"level":"info"}
+{"message":"[200] /finder 30ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 6ms","label":null,"level":"info"}
+{"message":"[200] POST /api/finder 2ms","label":null,"level":"info"}
+{"message":"Configuration file updated. Restarting...","label":null,"level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"/src/styles/global.css","label":"watch","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Re-optimizing dependencies because vite config has changed","label":"vite","level":"info"}
+{"message":"server restarted.","label":"vite","level":"info"}
+{"message":"[200] /finder 88ms","label":null,"level":"info"}
+{"message":"[200] / 23ms","label":null,"level":"info"}
+{"message":"[200] /sources 23ms","label":null,"level":"info"}
+{"message":"[200] /about 21ms","label":null,"level":"info"}
+{"message":"src/pages/finder.astro","label":"watch","level":"info"}
+{"message":"[200] /about 9ms","label":null,"level":"info"}
+{"message":"Configuration file updated. Restarting...","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"[200] /about 7ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"server restarted.","label":"vite","level":"info"}
+{"message":"[200] /about 14ms","label":null,"level":"info"}
+{"message":"[200] /about 15ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /about 10ms","label":null,"level":"info"}
+{"message":"program reload","label":"vite","level":"info"}
+{"message":"[200] /about 9ms","label":null,"level":"info"}

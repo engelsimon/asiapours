@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Figure from '../components/Figure.astro';
+import Hairline from '../components/Hairline.astro';
+
+const bookletSizeKB = Math.round(753311 / 1024);
+
+const lessons = [
+	{
+		id: 'ube',
+		name: 'Ube',
+		accent: 'ube' as const,
+		lesson: 'Own your name',
+		blurb:
+			"A purple yam Filipinos have grown for thousands of years, and the world discovered about a decade ago. The boom happened abroad. Most of the value stayed there too.",
+		href: '/ube',
+	},
+	{
+		id: 'yuzu',
+		name: 'Yuzu',
+		accent: 'yuzu' as const,
+		lesson: 'Regulate before you sell',
+		blurb:
+			"An aromatic citrus from Kochi Prefecture that Japan turned into a managed, protected, high margin export. Swiss readers will recognize the playbook immediately, because it is theirs.",
+		href: '/yuzu',
+	},
+	{
+		id: 'matcha',
+		name: 'Matcha',
+		accent: 'matcha' as const,
+		lesson: 'Scarcity is structural',
+		blurb:
+			"Zen tea culture meeting a social media demand shock. Matcha shows what a demand surge does to an artisanal supply base with an aging workforce.",
+		href: '/matcha',
+	},
+];
+
+const accentText = {
+	ube: 'text-ube',
+	yuzu: 'text-yuzu',
+	matcha: 'text-matcha',
+};
+
+const accentBorder = {
+	ube: 'border-ube',
+	yuzu: 'border-yuzu',
+	matcha: 'border-matcha',
+};
+
+const comparisonRows = [
+	{
+		label: 'Origin',
+		values: ['Philippines', 'China, then Japan', 'China, then Japan'],
+	},
+	{
+		label: 'Who controls the name',
+		values: ['Nobody yet', 'Japan, by registration', 'Contested'],
+	},
+	{
+		label: 'Value capture at origin',
+		values: ['Low', 'High', 'Under pressure'],
+	},
+	{
+		label: 'Pressure point',
+		values: ['Falling production', 'Aging growers', 'Five year replant cycle'],
+	},
+	{
+		label: 'The lesson',
+		values: ['Own your name', 'Regulate before you sell', 'Scarcity is structural'],
+	},
+];
+---
+
+<BaseLayout
+	title="Home"
+	description="A root, a fruit, a leaf. Three ingredients and the Asia behind them: ube, yuzu and matcha, in six cocktails."
+>
+	<!-- Hero -->
+	<section class="min-h-screen flex items-center border-b border-rule">
+		<div class="mx-auto max-w-4xl px-6 py-20 flex flex-col items-center text-center gap-8">
+			<h1 class="font-label text-3xl sm:text-4xl text-bone tracking-[0.2em]">Asia Pours</h1>
+			<p class="font-serif text-xl sm:text-2xl text-ash max-w-xl">
+				A root, a fruit, a leaf. Three ingredients and the Asia behind them.
+			</p>
+			<nav aria-label="Ingredients" class="flex items-center gap-6">
+				{lessons.map((item) => (
+					<a
+						href={`#${item.id}`}
+						class:list={['font-label text-sm tracking-[0.15em] hover:opacity-75 transition-opacity', accentText[item.accent]]}
+					>
+						{item.name.toUpperCase()}
+					</a>
+				))}
+			</nav>
+			<div class="w-full max-w-xs">
+				<Figure
+					src="/images/hero.jpg"
+					alt="A flat lay of a halved purple ube, a partially peeled yuzu, a bowl of whisked matcha and a bamboo chasen, arranged on dark slate."
+					caption="Ube, yuzu and matcha, arranged for the shoot."
+					aspect="1:1"
+					priority
+				/>
+			</div>
+		</div>
+	</section>
+
+	<!-- The premise -->
+	<section class="mx-auto max-w-2xl px-6 py-20 flex flex-col gap-6">
+		<p class="text-base leading-relaxed text-bone">
+			You can try to read your way into a culture on the flight to Singapore. I found out the
+			easier way is to order well. A drink is small enough to finish and specific enough to mean
+			something. It names a place, a season, a farm and a trade route, and it does all of that in
+			the time it takes to break the ice with the person across the table. Nobody has ever bonded
+			over a slide deck.
+		</p>
+		<p class="text-base leading-relaxed text-bone">
+			This booklet treats a cocktail as the smallest usable unit of cultural fluency. Each of the
+			three ingredients here carries a story that ends in a supply chain question your counterpart
+			in Manila, Osaka or Kyoto is dealing with right now. The drink is the entry point. The story
+			is what makes it memorable.
+		</p>
+		<p class="text-base leading-relaxed text-bone">
+			Every recipe comes in a version with alcohol, and every chapter closes with one that has
+			none. Half the drinks in this book are zero proof. That is not a concession. Some of the
+			best flavor work in Asian bars right now happens without a drop of spirit.
+		</p>
+	</section>
+
+	<!-- Three ingredients, three lessons -->
+	<section id="ingredients" class="mx-auto max-w-6xl px-6 py-20 flex flex-col gap-10">
+		<h2 class="font-label text-xs text-ash">Three ingredients, three lessons</h2>
+		<div class="grid gap-8 sm:grid-cols-3">
+			{lessons.map((item) => (
+				<div id={item.id} class:list={['bg-stone border-l-[3px] px-6 py-6 flex flex-col gap-3 scroll-mt-24', accentBorder[item.accent]]}>
+					<p class:list={['font-label text-xs', accentText[item.accent]]}>{item.name}</p>
+					<p class="font-serif text-xl text-bone">{item.lesson}</p>
+					<p class="text-sm text-ash leading-relaxed">{item.blurb}</p>
+					<a href={item.href} class:list={['font-label text-xs hover:opacity-75 transition-opacity mt-2', accentText[item.accent]]}>
+						Read the chapter &rarr;
+					</a>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<!-- Comparison table -->
+	<section class="mx-auto max-w-6xl px-6 py-20 flex flex-col gap-8">
+		<h2 class="font-label text-xs text-ash">The short version</h2>
+
+		<!-- Desktop / tablet: table, horizontal hairlines only -->
+		<table class="hidden sm:table w-full text-left border-collapse">
+			<thead>
+				<tr class="border-b border-rule">
+					<th class="py-3 pr-4 font-label text-xs text-mist font-medium"></th>
+					<th class="py-3 px-4 font-label text-xs text-ube font-medium">Ube</th>
+					<th class="py-3 px-4 font-label text-xs text-yuzu font-medium">Yuzu</th>
+					<th class="py-3 pl-4 font-label text-xs text-matcha font-medium">Matcha</th>
+				</tr>
+			</thead>
+			<tbody>
+				{comparisonRows.map((row) => (
+					<tr class="border-b border-rule">
+						<th scope="row" class="py-4 pr-4 text-sm text-ash font-normal text-left align-top">{row.label}</th>
+						{row.values.map((value) => (
+							<td class="py-4 px-4 text-sm text-bone align-top">{value}</td>
+						))}
+					</tr>
+				))}
+			</tbody>
+		</table>
+
+		<!-- Mobile: stacked, one block per ingredient -->
+		<div class="flex flex-col gap-10 sm:hidden">
+			{(['Ube', 'Yuzu', 'Matcha'] as const).map((name, colIndex) => (
+				<div class="flex flex-col gap-4">
+					<p class:list={['font-label text-xs', [accentText.ube, accentText.yuzu, accentText.matcha][colIndex]]}>{name}</p>
+					<dl class="flex flex-col gap-3">
+						{comparisonRows.map((row) => (
+							<div class="border-b border-rule pb-3 flex flex-col gap-1">
+								<dt class="text-xs text-mist">{row.label}</dt>
+								<dd class="text-sm text-bone">{row.values[colIndex]}</dd>
+							</div>
+						))}
+					</dl>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<Hairline />
+
+	<!-- Closing band -->
+	<section class="mx-auto max-w-6xl px-6 py-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+		<p class="font-serif text-xl text-bone max-w-md">
+			Six cocktails, three chapters, one argument about how origin, value and control interact
+			across Asian trade.
+		</p>
+		<div class="flex flex-wrap items-center gap-6">
+			<a href="/recipes" class="font-label text-xs text-brass hover:opacity-75 transition-opacity">
+				See the recipes &rarr;
+			</a>
+			<a href="/Asia_Pours_Booklet.pdf" class="font-label text-xs text-steel hover:opacity-75 transition-opacity">
+				Download the booklet (PDF, {bookletSizeKB} KB) &rarr;
+			</a>
+		</div>
+	</section>
+</BaseLayout>

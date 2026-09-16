@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+import Callout from '../components/Callout.astro';
+
+const bookletSizeKB = Math.round(753311 / 1024);
+---
+
+<BaseLayout title="About" description="About Asia Pours: the author, the project, and full disclosure on the use of AI in its research, writing and photography.">
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>About</Eyebrow>
+			<PageTitle>About this project</PageTitle>
+			<Deck>Who made this, why, and exactly how AI was and was not used to make it.</Deck>
+		</header>
+
+		<Hairline />
+
+		<div class="flex flex-col gap-6 max-w-[68ch] text-base leading-relaxed text-bone">
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">The project</h2>
+				<p>
+					Asia Pours is a Gen A 2026 graduation project created for Asia Society Switzerland,
+					presented at the State of Asia conference on 5 November 2026. The recipes were specified
+					and researched by the author, whose editorial judgment, rather than any generated text,
+					is the layer that decides what is worth printing.
+				</p>
+				<p>
+					The booklet argues that a cocktail is the smallest usable unit of cultural fluency.
+					Three Asian ingredients, ube, yuzu and matcha, each illustrate a different supply chain
+					governance pattern that matters to anyone doing business in Asia: origin without
+					control, origin as strategy, and origin under siege. A fourth pattern, that color is a
+					distribution strategy, ties the three together. This site collects the recipes, the
+					argument and the sourcing behind both.
+				</p>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">The author</h2>
+				<p>
+					Simon Engel is a passionate hobby bartender and beverage connoisseur. He learned
+					barkeeping with the European Bartender School in Cape Town and holds a WSET Level 2 in
+					Wine. He is part of the Gen A fellowship cohort 2026, building bridges between Asia and
+					European business.
+				</p>
+				<p>
+					With this project Simon intends to put his beverage skills to practical use: a guide for
+					business travelers and executives who want something worth sharing at the table. He is
+					of the opinion that business culture is best explained through taste and ingredients.
+				</p>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">A note on the recipes</h2>
+				<p>
+					Every measure is printed as specified. Where a build carries a technical tension, whether
+					color chemistry, dilution, cost or body, it is stated openly in the balance note rather
+					than quietly corrected.
+				</p>
+			</section>
+
+			<Callout label="Use of AI in this project">
+				<p class="mb-3">
+					This booklet was researched and written with the assistance of Anthropic's Claude, used
+					as a research, drafting and editing tool: to locate and cross reference published
+					sources, to draft and structure the narrative text, to analyze the balance logic of each
+					recipe, and to produce the layout of this site.
+				</p>
+				<p class="mb-3">
+					All photography in this booklet and on this site, both the six cocktails and the three
+					origin images, was AI generated to a specified art direction and is captioned as such
+					wherever it appears. This is not decorative and not a footnote: none of the people,
+					places or objects pictured are real.
+				</p>
+				<p class="mb-3">
+					Every factual claim traces to a named source, listed in full on the
+					<a href="/sources" class="text-steel hover:opacity-75 transition-opacity">sources page</a>.
+					Figures were checked against primary or institutional sources where available, and
+					market research estimates are identified as such. Where sources conflicted, the more
+					conservative figure was used. The analogies drawn to wider trade patterns are editorial
+					interpretation by the author, not sourced claims.
+				</p>
+				<p>
+					The what to expect notes are predictions reasoned from ingredient behavior. The tasting
+					notes under each recipe are the author's own, and where they disagree with the
+					prediction, the tasting wins.
+				</p>
+			</Callout>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">The booklet</h2>
+				<p>
+					The site draws on the full printed booklet, which includes additional figures and
+					sourcing detail not reproduced here.
+				</p>
+				<p>
+					<a
+						href="/Asia_Pours_Booklet.pdf"
+						class="font-label text-xs text-steel hover:opacity-75 transition-opacity"
+					>
+						Download the booklet (PDF, {bookletSizeKB} KB) &rarr;
+					</a>
+				</p>
+			</section>
+		</div>
+	</article>
+</BaseLayout>

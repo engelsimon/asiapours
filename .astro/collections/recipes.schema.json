@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "ingredient": {
+      "type": "string",
+      "enum": [
+        "ube",
+        "yuzu",
+        "matcha"
+      ]
+    },
+    "alcoholic": {
+      "type": "boolean"
+    },
+    "glass": {
+      "type": "string"
+    },
+    "build": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "item": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "item"
+        ]
+      }
+    },
+    "method": {
+      "type": "string"
+    },
+    "garnish": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "expect": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "balance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tasting": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "costEstimateCHF": {
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "slug",
+    "tagline",
+    "ingredient",
+    "alcoholic",
+    "glass",
+    "build",
+    "method",
+    "garnish",
+    "image",
+    "expect",
+    "balance",
+    "tasting",
+    "costEstimateCHF"
+  ]
+}

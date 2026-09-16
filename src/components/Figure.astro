@@ -1,0 +1,56 @@
+---
+interface Props {
+	src: string;
+	alt: string;
+	caption: string;
+	aspect?: '4:5' | '3:2' | '1:1';
+	priority?: boolean;
+}
+
+const { src, alt, caption, aspect = '3:2', priority = false } = Astro.props;
+
+const aspectClass = {
+	'4:5': 'aspect-[4/5]',
+	'3:2': 'aspect-[3/2]',
+	'1:1': 'aspect-square',
+}[aspect];
+
+// Real pixel dimensions of the source JPEGs, used to set width/height and
+// prevent layout shift while the image loads.
+const dimensions: Record<string, { width: number; height: number }> = {
+	'/images/hero.jpg': { width: 599, height: 599 },
+	'/images/kinampay.jpg': { width: 355, height: 445 },
+	'/images/kochi-spritz.jpg': { width: 406, height: 499 },
+	'/images/kulay-lilang-ginto.jpg': { width: 355, height: 445 },
+	'/images/rikyu-sour.jpg': { width: 411, height: 507 },
+	'/images/tencha-shading.jpg': { width: 879, height: 585 },
+	'/images/toji-highball.jpg': { width: 406, height: 498 },
+	'/images/ube-field.jpg': { width: 930, height: 621 },
+	'/images/uji-tonic.jpg': { width: 424, height: 521 },
+	'/images/yuzu-orchard.jpg': { width: 906, height: 604 },
+};
+
+const { width, height } = dimensions[src] ?? { width: 800, height: 800 };
+const webpSrc = src.replace(/\.jpg$/, '.webp');
+---
+
+<figure class="flex flex-col gap-2">
+	<div class:list={['overflow-hidden bg-stone', aspectClass]}>
+		<picture>
+			<source srcset={webpSrc} type="image/webp" />
+			<img
+				src={src}
+				alt={alt}
+				width={width}
+				height={height}
+				class="h-full w-full object-cover"
+				loading={priority ? 'eager' : 'lazy'}
+				fetchpriority={priority ? 'high' : 'auto'}
+				decoding={priority ? 'sync' : 'async'}
+			/>
+		</picture>
+	</div>
+	<figcaption class="text-xs text-mist">
+		{caption} <span class="text-mist">AI generated.</span>
+	</figcaption>
+</figure>

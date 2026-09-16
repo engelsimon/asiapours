@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+import Callout from '../components/Callout.astro';
+
+const patterns = [
+	{
+		number: 'One',
+		title: 'Origin without control',
+		accent: 'ube',
+		paragraphs: [
+			"The Philippines domesticated ube, holds its genetic diversity and supplies its entire cultural meaning, and captures almost none of the margin. The value moved to whoever converted the tuber into powder, extract and brand. Bohol's pending geographical indication application for kinampay is an attempt to claw the name back after the boom rather than before it.",
+		],
+		subsections: [
+			{
+				label: 'Where you have seen this before',
+				body: 'Any input whose story is more valuable than its substance and whose producers are fragmented. The processing step, not the growing step, is where pricing power lives. Ask who owns the conversion, not who owns the field.',
+			},
+			{
+				label: 'The transferable lesson',
+				body: 'Cultural authenticity is an asset that has to be registered to be defensible. Left unregistered it becomes a free input into somebody else\'s product, and the counterfeit market arrives first: purple sweet potato sold as ube, sencha powder sold as matcha. Verification then becomes its own industry. Matcha wholesale buyers in 2026 are commissioning third party traceability audits that did not exist as a line item three years ago.',
+			},
+		],
+	},
+	{
+		number: 'Two',
+		title: 'Origin as strategy',
+		accent: 'yuzu',
+		paragraphs: [
+			'Japan spent years on quarantine diplomacy before a single fresh yuzu reached Europe, launched through the top of the French restaurant world, registered its regional names, and kept supply deliberately tight. A crop of 25,000 tons has pricing power that far larger crops do not.',
+		],
+		subsections: [
+			{
+				label: 'The move most people miss',
+				body: 'Market access was a regulatory project before it was a commercial one. A village of 1,300 people rewrote its farming practice to satisfy a foreign inspector, and only then went selling. Most European firms entering Asia do this in the opposite order, discover the compliance problem after the sales pitch, and lose a year.',
+			},
+			{
+				label: 'The Swiss recognition',
+				body: 'Geographical indication is the same instrument behind Gruyere, Champagne and, in spirit, Swiss Made. The EU and Japan now mutually protect 423 registered names under their Economic Partnership Agreement. If your business has a place name in it, that treaty is part of your asset register whether or not anyone has told your legal team.',
+			},
+		],
+	},
+	{
+		number: 'Three',
+		title: 'Origin under siege',
+		accent: 'matcha',
+		paragraphs: [
+			'Eight centuries of craft met a demand shock it cannot absorb. Prices roughly doubled and then held, growers are retiring faster than fields can be replanted, and a new field takes four to five years to yield. There is no supply response available before roughly 2030.',
+		],
+		subsections: [
+			{
+				label: 'The structural read',
+				body: 'Any market with a long capacity lead time and an aging operator base responds to a demand shock through price and rationing, not volume. Allocation replaces negotiation. Relationships beat purchase orders, and the buyer who opens with aggressive price pressure gets allocated out. That is now the observed behavior of Japanese heritage tea makers, and it is the same behavior you see in constrained semiconductor and specialty materials supply.',
+			},
+			{
+				label: 'The split that follows',
+				body: "Kagoshima overtook Shizuoka in 2025 as Japan's top first flush producer after more than thirty years, on mechanization and flat terrain. Uji did not compete on volume; it moved upward into prestige. One product, two markets, diverging. The same split has already happened in coffee and wine, and it always ends the same way: the volume tier optimizes cost, the prestige tier sells provenance, and the middle disappears.",
+			},
+		],
+	},
+	{
+		number: 'Four',
+		title: 'Color is a distribution strategy',
+		accent: 'brass',
+		paragraphs: [
+			'Ube and matcha did not go global because they taste better than their competitors. They went global because violet and jade survive a phone screen. In an algorithmic feed, visual distinctiveness is free distribution, and a product that photographs unmistakably gets a marketing budget it never paid for.',
+			'This is worth taking seriously beyond food, because it has already reshaped how Asian cultural exports travel. The color palette, the object design and the single recognizable visual signature do the work that advertising used to do. Retail interiors, packaging and product design across the region are increasingly built for the photograph first.',
+			"There is a longer lineage here too. Rikyu's insistence on the rough domestic bowl over the expensive Chinese import, on the small bare room, on subtraction as the highest expression of taste, is the origin point of an aesthetic that European design has been borrowing for decades without much attribution. When a Swiss brand strips a product back to nothing and charges more for it, that is a four hundred year old argument being made again.",
+		],
+		subsections: [],
+	},
+];
+
+const questions = [
+	{
+		q: 'Who owns the name?',
+		body: 'Not the trademark. The place name, and whether it is registered anywhere a foreign court would recognize.',
+	},
+	{
+		q: 'Where does the conversion happen?',
+		body: 'The step that turns raw material into product is where margin sits. If it happens offshore, so does the profit.',
+	},
+	{
+		q: 'What is the lead time on new capacity?',
+		body: 'If it is measured in years, price is the only short term lever, and you are in an allocation market whether or not anyone has said so.',
+	},
+	{
+		q: 'What is your favorite memory of this ingredient?',
+		body: 'Where were you when you tasted it properly for the first time?',
+	},
+];
+---
+
+<BaseLayout title="The Argument" description="What the glass tells you: four patterns in how origin, value and control interact across Asian trade.">
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>The Point</Eyebrow>
+			<PageTitle>What the glass tells you</PageTitle>
+			<Deck>
+				Put the three stories side by side and you have a short course in how origin, value and
+				control interact across Asian trade. The patterns are not about food. Food is just where
+				they are easiest to taste.
+			</Deck>
+		</header>
+
+		<Hairline />
+
+		<div class="flex flex-col gap-14 max-w-2xl">
+			{patterns.map((pattern) => (
+				<section class="flex flex-col gap-4">
+					<h2 class="text-2xl font-medium text-bone">
+						<span class="text-mist mr-2">{pattern.number}.</span>
+						{pattern.title}
+					</h2>
+					<div class="flex flex-col gap-4 text-base leading-relaxed text-bone">
+						{pattern.paragraphs.map((p) => <p>{p}</p>)}
+					</div>
+					{pattern.subsections.length > 0 && (
+						<div class="flex flex-col gap-4 mt-2">
+							{pattern.subsections.map((sub) => (
+								<p class="text-base leading-relaxed text-bone">
+									<span class="font-medium text-bone">{sub.label}.</span> {sub.body}
+								</p>
+							))}
+						</div>
+					)}
+				</section>
+			))}
+		</div>
+
+		<Hairline />
+
+		<div class="max-w-2xl flex flex-col gap-6">
+			<Callout label="Four questions worth asking your drink counterpart">
+				<p class="mb-4">
+					The first three audit a value chain. The fourth is the one that actually starts the
+					conversation, which is the entire argument of this booklet.
+				</p>
+				<ol class="flex flex-col gap-3 list-decimal list-inside">
+					{questions.map((item) => (
+						<li>
+							<span class="font-medium text-bone">{item.q}</span> {item.body}
+						</li>
+					))}
+				</ol>
+			</Callout>
+
+			<p class="text-base leading-relaxed text-bone">
+				None of this stays in food. Learn to spot the three patterns in a cocktail and you will
+				spot them in a term sheet.
+			</p>
+		</div>
+	</article>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+interface Props {
+	eyebrow?: string;
+	accent?: 'brass' | 'ube' | 'yuzu' | 'matcha' | 'steel';
+}
+
+const { eyebrow, accent = 'brass' } = Astro.props;
+
+const colorClass = {
+	brass: 'text-brass',
+	ube: 'text-ube',
+	yuzu: 'text-yuzu',
+	matcha: 'text-matcha',
+	steel: 'text-steel',
+}[accent];
+---
+
+<div class="flex flex-col gap-2">
+	{eyebrow && <p class:list={['font-label text-xs', colorClass]}>{eyebrow}</p>}
+	<h2 class="text-2xl sm:text-3xl font-medium text-bone">
+		<slot />
+	</h2>
+</div>

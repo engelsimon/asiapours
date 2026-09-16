@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "chapterNumber": {
+      "type": "number"
+    },
+    "place": {
+      "type": "string"
+    },
+    "accent": {
+      "type": "string",
+      "enum": [
+        "ube",
+        "yuzu",
+        "matcha"
+      ]
+    },
+    "botanicalName": {
+      "type": "string"
+    },
+    "flavorDescription": {
+      "type": "string"
+    },
+    "originFigure": {
+      "type": "object",
+      "properties": {
+        "src": {
+          "type": "string"
+        },
+        "alt": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "src",
+        "alt",
+        "caption"
+      ]
+    },
+    "callouts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "body"
+        ]
+      }
+    },
+    "stats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label",
+          "source"
+        ]
+      }
+    },
+    "inTheGlass": {
+      "type": "string"
+    },
+    "recipes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "alcoholic": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "slug",
+          "alcoholic"
+        ]
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "chapterNumber",
+    "place",
+    "accent",
+    "botanicalName",
+    "flavorDescription",
+    "originFigure",
+    "callouts",
+    "stats",
+    "inTheGlass",
+    "recipes"
+  ]
+}

@@ -1,0 +1,19 @@
+---
+interface Props {
+	accent?: 'brass' | 'ube' | 'yuzu' | 'matcha' | 'steel';
+}
+
+const { accent = 'brass' } = Astro.props;
+
+const colorClass = {
+	brass: 'text-brass',
+	ube: 'text-ube',
+	yuzu: 'text-yuzu',
+	matcha: 'text-matcha',
+	steel: 'text-steel',
+}[accent];
+---
+
+<p class:list={['font-label text-xs', colorClass]}>
+	<slot />
+</p>

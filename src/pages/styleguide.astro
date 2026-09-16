@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Callout from '../components/Callout.astro';
+import Figure from '../components/Figure.astro';
+import StatLine from '../components/StatLine.astro';
+import Hairline from '../components/Hairline.astro';
+
+const accents = ['brass', 'ube', 'yuzu', 'matcha', 'steel'] as const;
+---
+
+<BaseLayout title="Styleguide" description="Internal reference for the Asia Pours design system.">
+	<div class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-16">
+		<div class="flex flex-col gap-4">
+			<Eyebrow>Styleguide</Eyebrow>
+			<PageTitle>Asia Pours — Design System</PageTitle>
+			<Deck>An internal reference page showing every shared component with sample content, not part of the public site navigation.</Deck>
+		</div>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">Eyebrow</h2>
+			<div class="flex flex-wrap gap-8">
+				{accents.map((accent) => (
+					<Eyebrow accent={accent}>Ube · Root & Ritual</Eyebrow>
+				))}
+			</div>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">PageTitle & Deck</h2>
+			<PageTitle>Ube: The Color That Isn't a Flavor</PageTitle>
+			<Deck>Purple yam has become a color first and an ingredient second. What gets lost when a crop turns into a hex code.</Deck>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">SectionHead</h2>
+			<SectionHead eyebrow="The Argument" accent="ube">Why we're pouring, not preaching</SectionHead>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">Callout</h2>
+			<div class="grid gap-6 sm:grid-cols-2">
+				{accents.map((accent) => (
+					<Callout label="Field note" accent={accent}>
+						Kinampay ube from Bukidnon is prized for a deeper violet than commercial varieties, a difference growers attribute to the region's volcanic soil. [VERIFY: source needed]
+					</Callout>
+				))}
+			</div>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">Figure</h2>
+			<div class="grid gap-6 sm:grid-cols-2">
+				<Figure
+					src="/images/ube-field.jpg"
+					alt="Rows of ube vines under cultivation in a terraced field."
+					caption="Ube under cultivation, Bukidnon."
+					aspect="3:2"
+				/>
+				<Figure
+					src="/images/kinampay.jpg"
+					alt="Close-up of harvested kinampay ube tubers, cut to show deep purple flesh."
+					caption="Kinampay ube, cut to show color."
+					aspect="4:5"
+				/>
+			</div>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">StatLine</h2>
+			<div class="grid gap-8 sm:grid-cols-3">
+				<StatLine value="$2.9B" label="Japan's matcha export value, 2026" source="[VERIFY: citation needed]" />
+				<StatLine value="4" label="Ingredients profiled in this project" source="Asia Pours editorial scope" />
+				<StatLine value="7" label="Countries represented across sourced ingredients" source="[VERIFY: citation needed]" />
+			</div>
+		</section>
+
+		<Hairline />
+
+		<section class="flex flex-col gap-6">
+			<h2 class="font-label text-xs text-ash">Hairline</h2>
+			<Hairline />
+		</section>
+	</div>
+</BaseLayout>

@@ -1,0 +1,8 @@
+---
+import { getEntry } from 'astro:content';
+import ChapterLayout from '../layouts/ChapterLayout.astro';
+
+const entry = await getEntry('chapters', 'yuzu');
+---
+
+<ChapterLayout entry={entry} />

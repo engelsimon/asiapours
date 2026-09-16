@@ -1,0 +1,23 @@
+---
+interface Props {
+	label: string;
+	accent?: 'brass' | 'ube' | 'yuzu' | 'matcha' | 'steel';
+}
+
+const { label, accent = 'brass' } = Astro.props;
+
+const borderClass = {
+	brass: 'border-brass',
+	ube: 'border-ube',
+	yuzu: 'border-yuzu',
+	matcha: 'border-matcha',
+	steel: 'border-steel',
+}[accent];
+---
+
+<div class:list={['bg-stone border-l-[3px] px-6 py-5 flex flex-col gap-2', borderClass]}>
+	<p class="font-label text-xs text-brass">{label}</p>
+	<div class="text-bone text-base leading-relaxed">
+		<slot />
+	</div>
+</div>

@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import Deck from '../../components/Deck.astro';
+import Hairline from '../../components/Hairline.astro';
+import Callout from '../../components/Callout.astro';
+import Figure from '../../components/Figure.astro';
+import ServingsScaler from '../../components/ServingsScaler.astro';
+
+export async function getStaticPaths() {
+	const recipes = await getCollection('recipes');
+	return recipes.map((recipe) => ({
+		params: { slug: recipe.data.slug },
+		props: { recipe },
+	}));
+}
+
+const { recipe } = Astro.props;
+const { name, tagline, ingredient, alcoholic, glass, build, method, garnish, image, expect, balance, tasting, costEstimateCHF } =
+	recipe.data;
+
+const ingredientLabel = {
+	ube: 'Ube',
+	yuzu: 'Yuzu',
+	matcha: 'Matcha',
+}[ingredient];
+---
+
+<BaseLayout title={name} description={tagline}>
+	<article class="recipe-print mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow accent={ingredient}>
+				{ingredientLabel} &middot; {alcoholic ? 'With alcohol' : 'Zero proof'}
+			</Eyebrow>
+			<PageTitle>{name}</PageTitle>
+			<Deck>{tagline}</Deck>
+		</header>
+
+		<Hairline />
+
+		<div class="grid gap-10 lg:grid-cols-2 lg:items-start">
+			<div class="flex flex-col gap-8 lg:order-1">
+				<p class="text-base text-bone">
+					<span class="font-label text-xs text-brass mr-2">Glass</span>
+					{glass}
+				</p>
+
+				<ServingsScaler build={build} />
+
+				<p class="text-base leading-relaxed text-bone">
+					<span class="font-label text-xs text-brass block mb-1">Method</span>
+					{method}
+				</p>
+
+				<p class="text-base leading-relaxed text-bone">
+					<span class="font-label text-xs text-brass block mb-1">Garnish</span>
+					{garnish}
+				</p>
+
+				<p class="text-sm text-mist">
+					<span class="font-label text-xs text-mist mr-2">Cost estimate</span>
+					{costEstimateCHF}
+				</p>
+			</div>
+
+			<div class="lg:order-2">
+				<Figure src={image} alt={`${name}, plated.`} caption={name} aspect="4:5" />
+			</div>
+		</div>
+
+		<Hairline />
+
+		<div class="flex flex-col gap-6 max-w-3xl">
+			<Callout label="What to expect in the glass" accent={ingredient}>
+				{expect.map((paragraph) => (
+					<p class="mb-3 last:mb-0">{paragraph}</p>
+				))}
+			</Callout>
+
+			<Callout label="Balance note" accent={ingredient}>
+				{balance.map((paragraph) => (
+					<p class="mb-3 last:mb-0">{paragraph}</p>
+				))}
+			</Callout>
+
+			<Callout label="Simon's note after tasting" accent={ingredient}>
+				{tasting.map((paragraph) => (
+					<p class="mb-3 last:mb-0">{paragraph}</p>
+				))}
+			</Callout>
+		</div>
+	</article>
+</BaseLayout>
