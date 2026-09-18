@@ -1,14 +1,17 @@
 ---
 import Mark from './Mark.astro';
+import NavIcon from './NavIcon.astro';
 
+// `icon` keys into NavIcon's own union, so a typo here is a build error
+// rather than a silently missing glyph.
 const navLinks = [
-  { label: 'Ingredients', href: '/#ingredients' },
-  { label: 'Recipes', href: '/recipes' },
-  { label: 'Bars', href: '/bars' },
-  { label: 'The Argument', href: '/the-argument' },
-  { label: 'Sources', href: '/sources' },
-  { label: 'Find your drink', href: '/finder' },
-];
+  { label: 'Ingredients', href: '/#ingredients', icon: 'ingredients' },
+  { label: 'Recipes', href: '/recipes', icon: 'recipes' },
+  { label: 'Bars', href: '/bars', icon: 'bars' },
+  { label: 'The Argument', href: '/the-argument', icon: 'argument' },
+  { label: 'Sources', href: '/sources', icon: 'sources' },
+  { label: 'Find your drink', href: '/finder', icon: 'finder' },
+] as const;
 ---
 
 <header class="border-b border-rule relative">
@@ -27,8 +30,9 @@ const navLinks = [
 					<li>
 						<a
 							href={link.href}
-							class="font-label text-xs text-ash hover:text-brass transition-colors"
+							class="font-label text-xs text-ash hover:text-brass transition-colors inline-flex items-center gap-2"
 						>
+							<NavIcon name={link.icon} class="shrink-0" />
 							{link.label}
 						</a>
 					</li>
@@ -66,8 +70,9 @@ const navLinks = [
 				<li>
 					<a
 						href={link.href}
-						class="font-label text-xs text-ash hover:text-brass transition-colors block py-3"
+						class="font-label text-xs text-ash hover:text-brass transition-colors flex items-center gap-3 py-3"
 					>
+						<NavIcon name={link.icon} size={16} class="shrink-0" />
 						{link.label}
 					</a>
 				</li>
