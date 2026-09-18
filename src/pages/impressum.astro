@@ -4,7 +4,6 @@ import Eyebrow from '../components/Eyebrow.astro';
 import PageTitle from '../components/PageTitle.astro';
 import Deck from '../components/Deck.astro';
 import Hairline from '../components/Hairline.astro';
-import Callout from '../components/Callout.astro';
 
 // Written to the German standard (§ 5 DDG, formerly § 5 TMG) because it is
 // the stricter of the two regimes in play and satisfies Swiss UWG
@@ -19,23 +18,27 @@ import Callout from '../components/Callout.astro';
 // the information be readily understandable by its audience, not that it be
 // in German.
 //
-// [VERIFY] markers below are real legal blanks, not placeholder prose.
-// Per CLAUDE.md rule 1 they are left visible rather than filled with
-// plausible text: a wrong address in an Impressum is worse than an obvious
-// gap, because it looks compliant while failing the actual requirement.
+// These values came from the operator directly. Nothing here may be guessed
+// or reconstructed: a wrong address in an Impressum is worse than a visible
+// blank, because it looks compliant while failing the actual requirement.
+// If any of it goes stale, it must be corrected here, not left to drift.
+// § 5 DDG wants a ladungsfähige Anschrift, an address where legal service
+// is effective, so a forwarding or PO box address would not satisfy it.
 const operator = {
 	name: 'Simon Engel',
-	street: '[VERIFY: street and house number]',
-	postcode: '[VERIFY: postcode]',
-	city: '[VERIFY: city]',
-	country: '[VERIFY: country]',
-	email: '[VERIFY: contact email address]',
-	// § 5 DDG requires a means of "fast electronic contact and direct
-	// communication". Email alone is generally accepted after the ECJ ruling
-	// in C-298/07, so a phone number is recommended rather than strictly
-	// mandatory. Delete this line if you would rather not publish one.
-	phone: '[VERIFY: telephone number, optional]',
+	street: 'Widumstr. 16',
+	postcode: '87452',
+	city: 'Altusried',
+	country: 'Germany',
+	email: 'ichvermeidespam@protonmail.com',
 };
+
+// § 5 DDG requires a means of "fast electronic contact and direct
+// communication". No telephone number is published: email alone satisfies
+// this after the ECJ ruling in C-298/07, provided the address is monitored
+// and answered promptly. That proviso is the whole basis for omitting the
+// phone number, so if the mailbox stops being read, the contact route stops
+// being compliant.
 ---
 
 <BaseLayout
@@ -74,10 +77,6 @@ const operator = {
 					<div class="flex flex-col gap-1">
 						<dt class="text-xs text-mist">Email</dt>
 						<dd class="text-bone">{operator.email}</dd>
-					</div>
-					<div class="flex flex-col gap-1">
-						<dt class="text-xs text-mist">Telephone</dt>
-						<dd class="text-bone">{operator.phone}</dd>
 					</div>
 				</dl>
 			</section>
@@ -129,19 +128,13 @@ const operator = {
 					Switzerland. That relationship is described on the
 					<a href="/about" class="text-steel hover:opacity-75 transition-opacity">about page</a>
 					and does not constitute an assignment of rights to, or an endorsement by, that
-					organisation.
+					organization.
 				</p>
 			</section>
 
-			<Callout label="This page is not yet complete">
-				<p>
-					The address and contact fields above are unfilled. An Impressum missing the
-					provider's address or a working contact route does not satisfy § 5 DDG, and in
-					Germany an incomplete or absent Impressum is an actionable offence that can be
-					pursued by competitors or consumer associations. Fill these in before the site is
-					publicly announced.
-				</p>
-			</Callout>
+			<p class="text-sm text-ash">
+				Last updated 18 September 2026.
+			</p>
 		</div>
 	</article>
 </BaseLayout>
