@@ -19,8 +19,13 @@ governance pattern that matters to anyone doing business in Asia.
    Reference sentence: "The bath is said to keep colds away for a year. Nobody
    checks." Avoid: "delve", "unlock", "elevate", "journey", "game-changer",
    exclamation marks, and rhetorical questions as headings.
-5. All photography is AI generated and must be captioned as such wherever it
-   appears. This is not optional and not a footnote.
+5. All photography on the original booklet pages (home, chapters, recipes) is
+   AI generated and must be captioned as such. This is not optional and not a
+   footnote. The Bars page (/bars) may also carry real photography of bars
+   and drinks; when it does, the image must carry a proper copyright or
+   photographer credit instead of an AI-generated caption. Every image on the
+   site must be one or the other, an AI-generated caption or a real
+   attribution, never uncaptioned.
 6. Never write em dashes or en dashes. Use commas, colons or full stops.
 
 ## Source material

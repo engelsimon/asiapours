@@ -1,0 +1,70 @@
+Copy this file, rename it to <slug>.md (lowercase, hyphens, no spaces) and
+fill it in. The .md.example extension keeps this template itself out of the
+site: the collection only loads *.md files.
+
+Required: name, slug, city, country, address, lat, lng, source, context.
+Optional: rank, note, signatureCocktail, relatedIngredients, image.
+
+Getting lat/lng: open https://www.openstreetmap.org, search the address,
+right click the spot and choose "Show address". The coordinates appear in
+the left panel. Six decimal places is plenty. Both must be plain numbers,
+not quoted strings, or the build will fail. A bar without valid coordinates
+is not plotted on the map.
+
+---
+name: Bar Name
+slug: bar-name
+city: Hamburg
+country: Germany
+address: "Full street address as published"
+
+# Numbers, not strings. Southern hemisphere lat and western hemisphere lng
+# are negative.
+lat: 53.550341
+lng: 9.992196
+
+# Where the facts in `context` come from. For a bar you went to yourself,
+# name yourself and the date, e.g.
+# "Visited by Simon Engel, March 2026"
+source: "Visited by Simon Engel, March 2026"
+
+# Only for entries on The World's 50 Best Bars. Delete this line otherwise:
+# an unranked bar renders without the brass rank badge.
+rank: 12
+
+# The sourced description. Everything here must trace to `source` above.
+# Keep the register dry and understated, per CLAUDE.md rule 4.
+context: >-
+  What the place is, who runs it, what the programme is built on. Facts, not
+  adjectives.
+
+# Your own comment. Optional, and the one field where opinion belongs.
+# Renders under a brass "From the visit" label, separated from the cited
+# description so the two are never confused.
+note: >-
+  What you actually thought. What you drank, who you went with, whether the
+  room worked.
+
+# Delete this whole block if the bar has no single signature drink. Do not
+# invent one. Three of the seeded bars omit it for exactly this reason.
+signatureCocktail:
+  name: Drink Name
+  description: >-
+    What is in it and what it is doing.
+
+# Any of ube, yuzu, matcha. Each renders as a link to that chapter page.
+# Leave as [] if the bar has no genuine connection to one of the three.
+relatedIngredients: []
+
+# Optional. Delete the whole block if there is no photo.
+# CLAUDE.md rule 5: every image is either AI generated or properly credited,
+# never uncaptioned.
+#   credit: ai-generated   -> caption is suffixed "AI generated."
+#   credit: photographer   -> `attribution` is shown instead, and is required
+image:
+  src: /images/bars/bar-name.jpg
+  alt: Describe what is in the frame, for screen readers.
+  caption: Short caption.
+  credit: photographer
+  attribution: "Photo: Simon Engel"
+---

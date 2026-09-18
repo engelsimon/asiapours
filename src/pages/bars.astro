@@ -1,0 +1,308 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+import Callout from '../components/Callout.astro';
+import Figure from '../components/Figure.astro';
+
+const allBars = await getCollection('bars');
+const bars = [...allBars].sort((a, b) => (a.data.rank ?? Infinity) - (b.data.rank ?? Infinity));
+
+const accentText: Record<string, string> = { ube: 'text-ube', yuzu: 'text-yuzu', matcha: 'text-matcha' };
+const ingredientLabel: Record<string, string> = { ube: 'Ube', yuzu: 'Yuzu', matcha: 'Matcha' };
+
+// City photography, not bar photography. No openly licensed photograph exists
+// for ten of the eleven bars below, and using a press or house photo without a
+// license would be infringement with a credit line attached. So each city gets
+// one openly licensed establishing shot, captioned as the city and never as a
+// bar. Every file here is CC0 or CC BY, deliberately not CC BY-SA, because
+// these are cropped to 3:2 and a crop is a derivative work.
+// Fetched by `npm run fetch-bar-images`, which is also the provenance record.
+// Widths and heights are the real pixel sizes of the files on disk.
+const cityImages: Record<
+	string,
+	{ src: string; alt: string; caption: string; attribution: string; width: number; height: number }
+> = {
+	'Hong Kong': {
+		src: '/images/bars/hong-kong.jpg',
+		alt: 'Hong Kong skyscrapers lit at night, seen across the harbour.',
+		caption: 'Hong Kong, across the harbour at night.',
+		attribution: 'Photo: Wilfredor, CC0, via Wikimedia Commons.',
+		width: 1920,
+		height: 1276,
+	},
+	Singapore: {
+		src: '/images/bars/singapore.jpg',
+		alt: 'The Singapore Central Business District skyline after dark.',
+		caption: 'Singapore, the Central Business District after dark.',
+		attribution: 'Photo: RM Bulseco, CC BY 2.0, via Wikimedia Commons.',
+		width: 1200,
+		height: 764,
+	},
+	Bangkok: {
+		src: '/images/bars/bangkok.jpg',
+		alt: 'The Chao Phraya river in Bangkok at night, with lit buildings along the bank.',
+		caption: 'Bangkok, the Chao Phraya at night.',
+		attribution: 'Photo: Wolfgang Weber, CC BY 3.0, via Wikimedia Commons.',
+		width: 1920,
+		height: 1281,
+	},
+	Seoul: {
+		src: '/images/bars/seoul.jpg',
+		alt: 'The Yeouido district of Seoul at night, seen across the Han river.',
+		caption: 'Seoul, Yeouido at night.',
+		attribution: 'Photo: Bryan Dorrough, CC BY 2.0, via Wikimedia Commons.',
+		width: 1920,
+		height: 1280,
+	},
+	Tokyo: {
+		src: '/images/bars/tokyo.jpg',
+		alt: 'Minato City, Tokyo, at night, with Tokyo Tower among the buildings.',
+		caption: 'Tokyo, Minato City at night.',
+		attribution: 'Photo: David Kernan, CC BY 4.0, via Wikimedia Commons.',
+		width: 1920,
+		height: 1080,
+	},
+	Guangzhou: {
+		src: '/images/bars/guangzhou.jpg',
+		alt: 'The Guangzhou skyline at night, seen across the Pearl river with the Liede bridge to the right.',
+		caption: 'Guangzhou, across the Pearl river at night.',
+		attribution: 'Photo: Dairui Chen, CC0, via Wikimedia Commons.',
+		width: 1920,
+		height: 1280,
+	},
+};
+
+// Group by city, then order the cities by their best ranked bar, so Hong Kong
+// leads on Bar Leone at number one. A city with no image still renders, it just
+// gets no establishing shot, which keeps adding a bar in a new city cheap.
+const cityOrder: string[] = [];
+const barsByCity = new Map<string, typeof bars>();
+for (const bar of bars) {
+	const city = bar.data.city;
+	if (!barsByCity.has(city)) {
+		barsByCity.set(city, []);
+		cityOrder.push(city);
+	}
+	barsByCity.get(city)!.push(bar);
+}
+const citySections = cityOrder.map((city) => ({
+	city,
+	country: barsByCity.get(city)![0].data.country,
+	image: cityImages[city],
+	bars: barsByCity.get(city)!,
+}));
+
+const mapData = bars.map((b) => ({
+	slug: b.data.slug,
+	name: b.data.name,
+	city: b.data.city,
+	country: b.data.country,
+	rank: b.data.rank ?? null,
+	lat: b.data.lat,
+	lng: b.data.lng,
+}));
+---
+
+<BaseLayout
+	title="Bars"
+	description="Asia based bars worth seeking out, starting with the Asia entries from The World's 50 Best Bars, plus places found while traveling."
+>
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>Bars</Eyebrow>
+			<PageTitle>Where to drink this in Asia</PageTitle>
+			<Deck>
+				A running list, not a finished one. It starts with the Asia based entries from The World's
+				50 Best Bars 2025 (the50.com) and grows with bars found while traveling, in Hamburg, Seoul,
+				and wherever comes next.
+			</Deck>
+		</header>
+
+		<Hairline />
+
+		<div id="bars-map" class="w-full h-[420px] bg-stone border border-rule" role="img" aria-label="Map of bars featured on this page"></div>
+		<p id="bars-map-fallback" class="text-sm text-mist hidden">
+			No bar on this list has confirmed coordinates yet, so the map has no pins to show. Coordinates
+			will appear here as they are added to each bar's entry.
+		</p>
+
+		<Callout label="A note on this list">
+			<p>
+				Rankings, names, addresses, house descriptions and named drinks come from The World's 50
+				Best Bars 2025 (the50.com). Map pins are geocoded from each published street address using
+				OpenStreetMap Nominatim, so a pin marks the building or the street, not the door. Three
+				bars, Bar Us, Hope &amp; Sesame and The Bellwood, carry no signature cocktail here because
+				their published entries name no single drink.
+			</p>
+			<p class="mt-3">
+				The large photographs are of the cities, not of the bars. No openly licensed photograph
+				of most of these rooms exists, and a press photo does not become usable by being
+				credited, so rather than misrepresent a skyline as an interior, each city carries one
+				openly licensed establishing shot, captioned and credited as what it is. Where a bar
+				itself has an openly licensed photograph, it sits on that bar's own card.
+			</p>
+		</Callout>
+
+		{citySections.map((section) => (
+		<section class="flex flex-col gap-6">
+			<div class="flex flex-col gap-4">
+				<div class="flex items-baseline justify-between gap-4 border-b border-brass pb-2">
+					<h2 class="font-label text-sm text-brass">{section.city}</h2>
+					<p class="font-label text-xs text-mist">
+						{/* Hong Kong and Singapore are their own country, so naming both would
+						    just repeat the heading. */}
+						{section.country !== section.city && `${section.country}, `}
+						{section.bars.length} {section.bars.length === 1 ? 'bar' : 'bars'}
+					</p>
+				</div>
+
+				{section.image && (
+					<Figure
+						src={section.image.src}
+						alt={section.image.alt}
+						caption={section.image.caption}
+						credit="photographer"
+						attribution={section.image.attribution}
+						aspect="3:2"
+						width={section.image.width}
+						height={section.image.height}
+						webp={false}
+					/>
+				)}
+			</div>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
+			{section.bars.map((bar) => (
+				<div class="flex flex-col gap-3 border border-rule bg-stone p-6">
+					{bar.data.image ? (
+						<Figure
+							src={bar.data.image.src}
+							alt={bar.data.image.alt}
+							caption={bar.data.image.caption}
+							credit={bar.data.image.credit}
+							attribution={bar.data.image.attribution}
+							aspect="4:5"
+							width={1920}
+							height={2560}
+							webp={false}
+						/>
+					) : null}
+
+					<div class="flex items-baseline justify-between gap-4">
+						<h3 class="text-xl font-medium text-bone">{bar.data.name}</h3>
+						{bar.data.rank && <span class="font-label text-xs text-brass shrink-0">#{bar.data.rank} 50 Best</span>}
+					</div>
+					<p class="text-sm leading-relaxed text-ash">{bar.data.context}</p>
+
+					{bar.data.note && (
+						<div class="mt-1 border-l-2 border-brass pl-4">
+							<p class="font-label text-xs text-brass mb-1">From the visit</p>
+							<p class="text-sm leading-relaxed text-bone">{bar.data.note}</p>
+						</div>
+					)}
+
+					{bar.data.signatureCocktail && (
+						<div class="mt-1">
+							<p class="font-label text-xs text-mist mb-1">Signature cocktail</p>
+							<p class="text-sm text-bone">{bar.data.signatureCocktail.name}</p>
+							<p class="text-sm text-ash">{bar.data.signatureCocktail.description}</p>
+						</div>
+					)}
+
+					<p class="text-sm text-ash mt-1">{bar.data.address}</p>
+
+					{bar.data.relatedIngredients.length > 0 && (
+						<div class="flex flex-wrap gap-3 mt-1">
+							{bar.data.relatedIngredients.map((ing) => (
+								<a href={`/${ing}`} class:list={['font-label text-xs hover:opacity-75 transition-opacity', accentText[ing]]}>
+									{ingredientLabel[ing]} &rarr;
+								</a>
+							))}
+						</div>
+					)}
+
+					<p class="text-xs text-mist mt-1">Source: {bar.data.source}</p>
+				</div>
+			))}
+		</div>
+		</section>
+		))}
+	</article>
+</BaseLayout>
+
+<script
+	define:vars={{ mapData }}
+>
+	window.__barsData = mapData;
+</script>
+
+<script>
+	// Renders pins only for bars with finite lat/lng, so a future entry added
+	// without coordinates degrades to the fallback note instead of plotting a
+	// wrong location.
+	import 'leaflet/dist/leaflet.css';
+	import * as L from 'leaflet';
+
+	type BarPoint = {
+		slug: string;
+		name: string;
+		city: string;
+		country: string;
+		rank: number | null;
+		lat: unknown;
+		lng: unknown;
+	};
+
+	function isFiniteCoord(v: unknown): v is number {
+		return typeof v === 'number' && Number.isFinite(v);
+	}
+
+	function initMap() {
+		const bars: BarPoint[] = (window as unknown as { __barsData: BarPoint[] }).__barsData ?? [];
+		const plottable = bars.filter((b) => isFiniteCoord(b.lat) && isFiniteCoord(b.lng));
+
+		const mapEl = document.getElementById('bars-map') as HTMLElement;
+		const fallback = document.getElementById('bars-map-fallback') as HTMLElement;
+
+		if (plottable.length === 0) {
+			mapEl.classList.add('hidden');
+			fallback.classList.remove('hidden');
+			return;
+		}
+
+		const map = L.map(mapEl, { scrollWheelZoom: false });
+
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			maxZoom: 18,
+		}).addTo(map);
+
+		const brassIcon = L.divIcon({
+			className: '',
+			html: '<span style="display:block;width:12px;height:12px;border-radius:50%;background:#C9A55F;border:2px solid #15191F;"></span>',
+			iconSize: [12, 12],
+			iconAnchor: [6, 6],
+		});
+
+		const latLngs: [number, number][] = [];
+
+		for (const bar of plottable) {
+			const point: [number, number] = [bar.lat as number, bar.lng as number];
+			latLngs.push(point);
+			const rankLine = bar.rank ? `<br>No. ${bar.rank}, The World's 50 Best Bars 2025` : '';
+			L.marker(point, { icon: brassIcon })
+				.addTo(map)
+				.bindPopup(`<strong>${bar.name}</strong><br>${bar.city}, ${bar.country}${rankLine}`);
+		}
+
+		// Frame every pin rather than guessing a zoom level, so adding a bar
+		// outside Asia later (Hamburg, and whatever follows) still fits.
+		map.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40] });
+	}
+
+	initMap();
+</script>

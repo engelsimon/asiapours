@@ -5,9 +5,29 @@ interface Props {
 	caption: string;
 	aspect?: '4:5' | '3:2' | '1:1';
 	priority?: boolean;
+	credit?: 'ai-generated' | 'photographer';
+	attribution?: string;
+	// Override the dimensions table below. Used by images that are not part
+	// of the booklet set, e.g. the city photography on /bars.
+	width?: number;
+	height?: number;
+	// Set false for sources that have no .webp sibling on disk, so the
+	// <source> element is not emitted and the browser is not sent to a 404.
+	webp?: boolean;
 }
 
-const { src, alt, caption, aspect = '3:2', priority = false } = Astro.props;
+const {
+	src,
+	alt,
+	caption,
+	aspect = '3:2',
+	priority = false,
+	credit = 'ai-generated',
+	attribution,
+	width: widthProp,
+	height: heightProp,
+	webp = true,
+} = Astro.props;
 
 const aspectClass = {
 	'4:5': 'aspect-[4/5]',
@@ -30,14 +50,16 @@ const dimensions: Record<string, { width: number; height: number }> = {
 	'/images/yuzu-orchard.jpg': { width: 906, height: 604 },
 };
 
-const { width, height } = dimensions[src] ?? { width: 800, height: 800 };
+const fallback = dimensions[src] ?? { width: 800, height: 800 };
+const width = widthProp ?? fallback.width;
+const height = heightProp ?? fallback.height;
 const webpSrc = src.replace(/\.jpg$/, '.webp');
 ---
 
 <figure class="flex flex-col gap-2">
 	<div class:list={['overflow-hidden bg-stone', aspectClass]}>
 		<picture>
-			<source srcset={webpSrc} type="image/webp" />
+			{webp && <source srcset={webpSrc} type="image/webp" />}
 			<img
 				src={src}
 				alt={alt}
@@ -51,6 +73,11 @@ const webpSrc = src.replace(/\.jpg$/, '.webp');
 		</picture>
 	</div>
 	<figcaption class="text-xs text-mist">
-		{caption} <span class="text-mist">AI generated.</span>
+		{caption}{' '}
+		{credit === 'ai-generated' ? (
+			<span class="text-mist">AI generated.</span>
+		) : (
+			<span class="text-mist">{attribution ?? '[VERIFY: attribution needed]'}</span>
+		)}
 	</figcaption>
 </figure>

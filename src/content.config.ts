@@ -1,6 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+
 const chapters = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/chapters' }),
 	schema: z.object({
@@ -64,4 +65,46 @@ const recipes = defineCollection({
 	}),
 });
 
-export const collections = { chapters, recipes };
+const bars = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/bars' }),
+	schema: z.object({
+		name: z.string(),
+		slug: z.string(),
+		city: z.string(),
+		country: z.string(),
+		address: z.string(),
+		// Geocoded from the published street address via OpenStreetMap
+		// Nominatim. The map only plots entries where both are finite numbers.
+		lat: z.number(),
+		lng: z.number(),
+		source: z.string(),
+		rank: z.number().optional(),
+		// Sourced description. Everything here traces to `source`.
+		context: z.string(),
+		// Simon's own comment, kept in a separate field so the cited
+		// description above never gets blended with personal opinion.
+		// Rendered under a "From the visit" label.
+		note: z.string().optional(),
+		// Optional: only present where the source names a specific drink.
+		// Bars whose published entry names no single signature serve omit
+		// this rather than carry an invented one.
+		signatureCocktail: z
+			.object({
+				name: z.string(),
+				description: z.string(),
+			})
+			.optional(),
+		relatedIngredients: z.array(z.enum(['ube', 'yuzu', 'matcha'])).default([]),
+		image: z
+			.object({
+				src: z.string(),
+				alt: z.string(),
+				caption: z.string(),
+				credit: z.enum(['ai-generated', 'photographer']),
+				attribution: z.string().optional(),
+			})
+			.optional(),
+	}),
+});
+
+export const collections = { chapters, recipes, bars };
