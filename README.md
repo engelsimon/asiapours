@@ -39,28 +39,41 @@ This is a fully static build, no server, adapter or environment variables
 required. The drink finder matches recipes with client-side logic only.
 
 Production deployment is GitHub → Vercel. United-domains is the domain
-registrar for asiapours.com only, it does not host the site.
+registrar for asiapours.com.
 
-1. Push to the `main` branch (or merge a pull request into it) of the GitHub
-   repository connected to the Vercel project. Vercel builds with
-   `npm run build` and deploys automatically, no manual upload step.
+### One-time DNS cutover
 
-2. In the Vercel project's Domains settings, asiapours.com should already be
-   added. If it needs to be re-added, Vercel's dashboard shows the exact DNS
-   records to set (typically an `A` record to Vercel's anycast IP, or a
-   `CNAME` for a subdomain).
+Until this is done, asiapours.com does not serve the Vercel build. The domain
+points at united-domains' own Apache hosting, which serves a build uploaded by
+hand over FTP. The two paths are independent: pushing to `main` updates the
+Vercel deployment and does not change what the live domain serves.
 
-3. In United-domains' DNS settings for asiapours.com, set the records Vercel
-   asked for. Propagation can take a few hours after a change.
+1. In the Vercel project, add `asiapours.com` under Settings → Domains.
+   Vercel then displays the exact DNS records to set. Use the records it
+   shows rather than any value written down here, since they are per-project
+   and do change.
 
-4. Vercel provisions and renews the HTTPS certificate automatically once DNS
+2. In united-domains' DNS settings for asiapours.com, replace the existing
+   `A` record, which points at the old Apache host, with what Vercel asked
+   for. Propagation can take a few hours.
+
+3. Vercel provisions and renews the HTTPS certificate automatically once DNS
    points at it, nothing to configure by hand.
 
-5. Visit https://asiapours.com and spot-check the homepage, a recipe page,
-   `/finder`, and `/bars`.
+4. Confirm the cutover landed. `curl -sI https://asiapours.com | grep -i server`
+   should report `Vercel`, not `Apache`. That header is the quickest way to
+   tell which host actually answered.
 
-Every push to the connected branch triggers a new deployment; there is no
-separate manual upload step.
+5. The old FTP hosting can then be cancelled or left alone. Nothing deploys to
+   it any more, but until DNS moves it is still what visitors see.
+
+### Routine deployment, after the cutover
+
+1. Push to the `main` branch, or merge a pull request into it. Vercel builds
+   with `npm run build` and deploys automatically, no manual upload step.
+
+2. Visit https://asiapours.com and spot-check the homepage, a recipe page,
+   `/finder`, and `/bars`.
 
 ## Adding a bar
 
