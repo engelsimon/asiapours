@@ -1,19 +1,27 @@
 ---
+import Mark from './Mark.astro';
+
 const navLinks = [
   { label: 'Ingredients', href: '/#ingredients' },
   { label: 'Recipes', href: '/recipes' },
+  { label: 'Bars', href: '/bars' },
   { label: 'The Argument', href: '/the-argument' },
   { label: 'Sources', href: '/sources' },
   { label: 'Find your drink', href: '/finder' },
 ];
 ---
 
-<header class="border-b border-rule">
+<header class="border-b border-rule relative">
 	<div class="mx-auto max-w-6xl px-6 py-6 flex items-center justify-between gap-6">
-		<a href="/" class="font-label text-sm text-bone hover:text-brass transition-colors">
+		<a
+			href="/"
+			class="font-label text-sm text-bone hover:text-brass transition-colors inline-flex items-center gap-3"
+		>
+			<Mark size={26} class="shrink-0" />
 			Asia Pours
 		</a>
-		<nav aria-label="Primary">
+
+		<nav aria-label="Primary" class="hidden sm:block">
 			<ul class="flex flex-wrap items-center gap-x-8 gap-y-2">
 				{navLinks.map((link) => (
 					<li>
@@ -27,5 +35,87 @@ const navLinks = [
 				))}
 			</ul>
 		</nav>
+
+		<button
+			id="nav-toggle"
+			type="button"
+			class="sm:hidden inline-flex items-center justify-center p-2 -mr-2 text-bone hover:text-brass transition-colors"
+			aria-expanded="false"
+			aria-controls="mobile-nav"
+			aria-label="Open menu"
+		>
+			<svg id="nav-icon-open" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+				<line x1="2" y1="6" x2="20" y2="6" />
+				<line x1="2" y1="11" x2="20" y2="11" />
+				<line x1="2" y1="16" x2="20" y2="16" />
+			</svg>
+			<svg id="nav-icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" class="hidden" aria-hidden="true">
+				<line x1="3" y1="3" x2="19" y2="19" />
+				<line x1="19" y1="3" x2="3" y2="19" />
+			</svg>
+		</button>
 	</div>
+
+	<nav
+		id="mobile-nav"
+		aria-label="Primary, mobile"
+		class="hidden sm:hidden border-t border-rule bg-slate"
+	>
+		<ul class="flex flex-col px-6 py-4 gap-1">
+			{navLinks.map((link) => (
+				<li>
+					<a
+						href={link.href}
+						class="font-label text-xs text-ash hover:text-brass transition-colors block py-3"
+					>
+						{link.label}
+					</a>
+				</li>
+			))}
+		</ul>
+	</nav>
 </header>
+
+<script>
+	const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
+	const panel = document.getElementById('mobile-nav') as HTMLElement;
+	const iconOpen = document.getElementById('nav-icon-open') as HTMLElement;
+	const iconClose = document.getElementById('nav-icon-close') as HTMLElement;
+
+	function closeMenu() {
+		panel.classList.add('hidden');
+		toggle.setAttribute('aria-expanded', 'false');
+		toggle.setAttribute('aria-label', 'Open menu');
+		iconOpen.classList.remove('hidden');
+		iconClose.classList.add('hidden');
+	}
+
+	function openMenu() {
+		panel.classList.remove('hidden');
+		toggle.setAttribute('aria-expanded', 'true');
+		toggle.setAttribute('aria-label', 'Close menu');
+		iconOpen.classList.add('hidden');
+		iconClose.classList.remove('hidden');
+		const firstLink = panel.querySelector('a');
+		(firstLink as HTMLAnchorElement | null)?.focus();
+	}
+
+	toggle.addEventListener('click', () => {
+		const expanded = toggle.getAttribute('aria-expanded') === 'true';
+		expanded ? closeMenu() : openMenu();
+	});
+
+	panel.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') {
+			closeMenu();
+			toggle.focus();
+		}
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+			closeMenu();
+			toggle.focus();
+		}
+	});
+</script>
