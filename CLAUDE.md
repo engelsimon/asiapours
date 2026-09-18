@@ -83,6 +83,13 @@ in `src/styles/global.css`. No Google Fonts CDN.
 - Generous whitespace. No drop shadows, no gradients, no rounded corners beyond
   2px (`--radius-*` is capped at 2px in the theme), no icon sets, no stock
   illustration.
+- "No icon sets" bars an external icon library (Lucide, Feather, Heroicons,
+  Font Awesome and the rest), not the icon itself. Icons drawn by hand for this
+  site are fine, and live in `src/components/NavIcon.astro`. They are stroked
+  and never filled, sit on a 16 unit grid, use `currentColor` so they inherit
+  the ash-to-brass hover, and carry round caps and joins to match
+  `Mark.astro`. An icon that needs more than a few strokes to read at 14px is
+  the wrong icon, not a reason to raise the detail.
 - Recipe photography is 4:5 portrait. Origin photography is 3:2 landscape.
 
 ## Development

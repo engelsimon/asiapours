@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Deck from '../components/Deck.astro';
+import Hairline from '../components/Hairline.astro';
+import Callout from '../components/Callout.astro';
+
+// Written to the German standard (§ 5 DDG, formerly § 5 TMG) because it is
+// the stricter of the two regimes in play and satisfies Swiss UWG
+// Art. 3(1)(s) as a side effect. The audience is Swiss and German, so the
+// stricter rule is the safe default.
+//
+// § 18 Abs. 2 MStV additionally applies here: this site carries regularly
+// updated journalistic and editorial content, which triggers the separate
+// named-responsible-person requirement below.
+//
+// Kept in English because the entire site is English and the duty is that
+// the information be readily understandable by its audience, not that it be
+// in German.
+//
+// [VERIFY] markers below are real legal blanks, not placeholder prose.
+// Per CLAUDE.md rule 1 they are left visible rather than filled with
+// plausible text: a wrong address in an Impressum is worse than an obvious
+// gap, because it looks compliant while failing the actual requirement.
+const operator = {
+	name: 'Simon Engel',
+	street: '[VERIFY: street and house number]',
+	postcode: '[VERIFY: postcode]',
+	city: '[VERIFY: city]',
+	country: '[VERIFY: country]',
+	email: '[VERIFY: contact email address]',
+	// § 5 DDG requires a means of "fast electronic contact and direct
+	// communication". Email alone is generally accepted after the ECJ ruling
+	// in C-298/07, so a phone number is recommended rather than strictly
+	// mandatory. Delete this line if you would rather not publish one.
+	phone: '[VERIFY: telephone number, optional]',
+};
+---
+
+<BaseLayout
+	title="Impressum"
+	description="Legal notice and provider identification for asiapours.com under § 5 DDG and § 18 Abs. 2 MStV."
+>
+	<article class="mx-auto max-w-6xl px-6 py-16 flex flex-col gap-10">
+		<header class="flex flex-col gap-4 max-w-2xl">
+			<Eyebrow>Legal</Eyebrow>
+			<PageTitle>Impressum</PageTitle>
+			<Deck>
+				Provider identification under § 5 DDG and § 18 Abs. 2 MStV.
+			</Deck>
+		</header>
+
+		<Hairline />
+
+		<div class="flex flex-col gap-10 max-w-[68ch] text-base leading-relaxed text-bone">
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">Provider</h2>
+				<address class="not-italic flex flex-col gap-1 text-bone">
+					<span>{operator.name}</span>
+					<span>{operator.street}</span>
+					<span>{operator.postcode} {operator.city}</span>
+					<span>{operator.country}</span>
+				</address>
+				<p class="text-sm text-ash">
+					This site is operated privately by a natural person. It is an editorial project and
+					not a commercial offering.
+				</p>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">Contact</h2>
+				<dl class="flex flex-col gap-3">
+					<div class="flex flex-col gap-1">
+						<dt class="text-xs text-mist">Email</dt>
+						<dd class="text-bone">{operator.email}</dd>
+					</div>
+					<div class="flex flex-col gap-1">
+						<dt class="text-xs text-mist">Telephone</dt>
+						<dd class="text-bone">{operator.phone}</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">
+					Responsible for content under § 18 Abs. 2 MStV
+				</h2>
+				<address class="not-italic flex flex-col gap-1 text-bone">
+					<span>{operator.name}</span>
+					<span>{operator.street}</span>
+					<span>{operator.postcode} {operator.city}</span>
+					<span>{operator.country}</span>
+				</address>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">Consumer dispute resolution</h2>
+				<p>
+					The operator is neither obliged nor willing to participate in dispute resolution
+					proceedings before a consumer arbitration board.
+				</p>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">Liability for links</h2>
+				<p>
+					This site links to external websites over whose content the operator has no control.
+					No liability is accepted for that external content. Responsibility for it rests with
+					its respective provider or operator. Linked pages were checked for apparent legal
+					violations at the time of linking; no permanent monitoring of linked content is
+					undertaken without concrete indication of an infringement.
+				</p>
+			</section>
+
+			<section class="flex flex-col gap-4">
+				<h2 class="font-label text-xs text-brass">Copyright</h2>
+				<p>
+					Text, photography and layout on this site are the property of the operator unless a
+					different source is credited at the point of use. The city photographs on the
+					<a href="/bars" class="text-steel hover:opacity-75 transition-opacity">bars page</a>
+					are used under the Creative Commons licenses named in their individual credits. All
+					other photography on this site is AI generated and captioned as such, as set out in
+					the <a href="/about" class="text-steel hover:opacity-75 transition-opacity">AI
+					disclosure</a>.
+				</p>
+				<p>
+					Asia Pours was created as a Gen A 2026 graduation project for Asia Society
+					Switzerland. That relationship is described on the
+					<a href="/about" class="text-steel hover:opacity-75 transition-opacity">about page</a>
+					and does not constitute an assignment of rights to, or an endorsement by, that
+					organisation.
+				</p>
+			</section>
+
+			<Callout label="This page is not yet complete">
+				<p>
+					The address and contact fields above are unfilled. An Impressum missing the
+					provider's address or a working contact route does not satisfy § 5 DDG, and in
+					Germany an incomplete or absent Impressum is an actionable offence that can be
+					pursued by competitors or consumer associations. Fill these in before the site is
+					publicly announced.
+				</p>
+			</Callout>
+		</div>
+	</article>
+</BaseLayout>
