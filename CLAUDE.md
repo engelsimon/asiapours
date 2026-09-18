@@ -75,6 +75,48 @@ Type: `--font-serif` (Fraunces) for all reading text and headings,
 are self-hosted via `@fontsource/fraunces` and `@fontsource/inter`, imported
 in `src/styles/global.css`. No Google Fonts CDN.
 
+## The mark and what it means
+
+The logo lives in `src/components/Mark.astro`, with the same path data
+duplicated in `public/favicon.svg` and `scripts/generate-icons.mjs`. It is a
+martini glass holding a brass sun and a leaf, with the liquid line running
+between them.
+
+Each element carries a specific meaning, and they are not interchangeable
+decoration. Anyone redrawing the mark should keep all four or propose a new
+reading deliberately.
+
+- **The martini glass is the frame.** The project explores culture through
+  drinks rather than cataloguing cocktail recipes. The glass is where the
+  story ends up, not what the story is about.
+- **The brass sun is place and origin.** It stands for Asia without a flag, a
+  skyline or a map. Readable as a rising sun, but more broadly as origin,
+  warmth and discovery. It is the one fixed brass element in the mark, which
+  is what gives the whole thing its archival, editorial feel.
+- **The leaf is the ingredient side.** It points at tea and matcha directly
+  but stays generic enough to carry cultivation, terroir and agriculture, so
+  it still covers ube and yuzu and whatever ingredient comes next. Its upward
+  movement is the growth and exploration in the mark.
+- **The liquid line is the join.** It is the surface of the drink, and it is
+  what connects the sun to the glass: ingredients originate in a place,
+  tradition turns them into flavor, and the glass is where those stories
+  meet. A landscape or horizon is available as a reading, but the line is
+  drawn straight, so call it the liquid line and let the horizon stay an
+  interpretation rather than a claim about the shape.
+
+The narrative in one line: Asia Pours explores Asia through the glass, from
+where an ingredient grows to how it is poured.
+
+Short brand lines, in the register of rule 4:
+
+- "Place. Ingredient. Glass."
+- "A continent, distilled into a glass."
+
+The line is drawn straight (`M33.4 32 L94.6 32`). If it is ever given a
+shallow arc to strengthen the horizon reading, the wording above can move
+with it, but the two must not drift apart: do not describe the mark as
+curved while it is drawn straight.
+
 ## Design rules
 
 - Ranged left, never justified. Centered only on the hero.
