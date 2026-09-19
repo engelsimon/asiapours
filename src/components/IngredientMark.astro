@@ -1,0 +1,98 @@
+---
+// The three ingredient marks: a yam, a citrus, a bowl of whisked tea.
+//
+// These are not nav icons and deliberately do not live in NavIcon.astro. That
+// file holds 16 unit, 14px, single stroke weight glyphs whose whole job is to
+// sit next to a nav label. These are drawings, on a 220 unit grid, rendered
+// four to five times larger, and they carry filled areas. Mixing the two in
+// one file would blur a distinction worth keeping: an icon labels a link, a
+// mark illustrates a subject.
+//
+// What they do share with NavIcon.astro is the line language, which is what
+// stops the site having two drawing styles: round caps, round joins, stroke
+// never varying within a mark, and `currentColor` throughout so the mark takes
+// its color from the surrounding accent rather than carrying its own.
+//
+// On color. The source drawings filled the flesh of each ingredient with
+// brass. Brass is reserved for hairlines and small labels, with exactly one
+// resting fill exception on the whole site, the booklet download, and that
+// exception only works while it stays singular. Three brass filled drawings
+// would quietly make it four. So each mark is monochrome in its own accent
+// instead: solid where the source was solid, and at 22 percent where the
+// source used brass for flesh or liquid. That also honors the one accent per
+// section rule, which a shared brass would have broken by putting the same
+// color inside all three.
+
+interface Props {
+	name: 'ube' | 'yuzu' | 'matcha';
+	size?: number;
+	class?: string;
+}
+
+const { name, size = 220, class: className } = Astro.props;
+
+// Named rather than repeated inline. The flesh is the only part of any mark
+// that is not either a stroke or a solid, and it is the same value in all
+// three, so it should be stated once.
+const FLESH_OPACITY = 0.22;
+---
+
+<svg
+	width={size}
+	height={size}
+	viewBox="0 0 220 220"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="7"
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	class={className}
+	aria-hidden="true"
+>
+	{/* A yam lying at a slight angle, cut end toward the viewer, with the vine
+	    and a leaf coming off the top. The cut end is the whole point of ube:
+	    the color is in the flesh, not the skin. */}
+	{name === 'ube' && (
+		<>
+			<g transform="rotate(-18 108 136)">
+				<path d="M72 136 C72 114 90 104 116 104 C144 104 164 116 164 136 C164 156 144 168 116 168 C90 168 72 158 72 136 Z" />
+				<ellipse cx="74" cy="136" rx="16" ry="30" fill="currentColor" fill-opacity={FLESH_OPACITY} stroke="none" />
+				<ellipse cx="74" cy="136" rx="16" ry="30" />
+			</g>
+			<path d="M140 100 C146 84 150 70 150 60" />
+			<path d="M150 60 C150 40 134 30 118 30 C130 40 132 52 150 60 Z" fill="currentColor" stroke="none" />
+			<path d="M150 60 C150 40 134 30 118 30 C130 40 132 52 150 60 Z" />
+			<path d="M150 60 C166 48 170 34 166 22" />
+		</>
+	)}
+
+	{/* A whole yuzu with stem and leaf. Drawn round rather than with the fruit's
+	    real knobbly rind: at card size the bumps read as a drawing error. */}
+	{name === 'yuzu' && (
+		<>
+			<circle cx="100" cy="132" r="48" fill="currentColor" fill-opacity={FLESH_OPACITY} stroke="none" />
+			<circle cx="100" cy="132" r="48" />
+			<path d="M100 84 C104 72 112 64 122 60" />
+			<path d="M158 62 C158 40 140 30 124 30 C136 40 138 52 158 62 Z" fill="currentColor" stroke="none" />
+			<path d="M158 62 C158 40 140 30 124 30 C136 40 138 52 158 62 Z" />
+			<path d="M158 62 C174 50 178 34 174 22" />
+		</>
+	)}
+
+	{/* A chawan with the tea surface showing, and a chasen standing beside it.
+	    The whisk is drawn as five splayed tines on a handle rather than as a
+	    solid shape, because a chasen is mostly air and a filled one reads as a
+	    paintbrush. */}
+	{name === 'matcha' && (
+		<>
+			<path d="M44 112 L154 112 C150 156 128 178 99 178 C70 178 48 156 44 112 Z" />
+			<ellipse cx="99" cy="112" rx="55" ry="13" fill="currentColor" fill-opacity={FLESH_OPACITY} stroke="none" />
+			<ellipse cx="99" cy="112" rx="55" ry="13" />
+			<path d="M174 178 L174 110" />
+			<path d="M174 110 C174 86 172 68 168 50" />
+			<path d="M174 110 C174 86 176 68 180 50" />
+			<path d="M174 110 C172 88 164 70 157 56" />
+			<path d="M174 110 C176 88 184 70 191 56" />
+		</>
+	)}
+</svg>
