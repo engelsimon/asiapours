@@ -75,8 +75,20 @@ const comparisonRows = [
 	description="A root, a fruit, a leaf. Three ingredients and the Asia behind them: ube, yuzu and matcha, in six cocktails."
 >
 	<!-- Hero -->
-	<section class="min-h-screen flex items-center border-b border-rule">
-		<div class="mx-auto max-w-4xl px-6 py-20 flex flex-col items-center text-center gap-8">
+	{/* `min-h-full`, not `min-h-screen`. BaseLayout makes the body a one viewport
+	    flex column with main taking the slack, so full here means the screen
+	    minus the header. Measured against the whole viewport instead, the hero
+	    centers its content a header's worth too low and drops the photo caption
+	    onto the fold. It also inherits dvh from the body, so on iOS Safari it
+	    tracks the visible area rather than the taller URL-bar-collapsed one.
+
+	    The padding and gaps are smaller than the site's usual rhythm on purpose.
+	    Content shorter than the container is centered, so the padding is
+	    invisible in the normal case and only does anything once the content
+	    would otherwise overflow. Buying headroom costs nothing until it is
+	    needed. */}
+	<section class="min-h-full flex items-center border-b border-rule">
+		<div class="mx-auto max-w-4xl px-6 py-12 flex flex-col items-center text-center gap-6">
 			<h1 class="font-label text-3xl sm:text-4xl text-bone tracking-[0.2em]">Asia Pours</h1>
 			<p class="font-serif text-xl sm:text-2xl text-ash max-w-xl">
 				A root, a fruit, a leaf. Three ingredients and the Asia behind them.
@@ -96,7 +108,11 @@ const comparisonRows = [
 			    placed after it would only be visible to a reader who had already
 			    decided to scroll. */}
 			<BookletDownload label="Download the booklet" />
-			<div class="w-full max-w-xs">
+			{/* Sized so the hero, header included, clears a 13 inch laptop. At the
+			    old 20rem the caption landed exactly on the fold and was sliced in
+			    half, which reads as a broken page rather than as an invitation to
+			    scroll. */}
+			<div class="w-full max-w-[15rem] sm:max-w-[16rem]">
 				<Figure
 					src="/images/hero.jpg"
 					alt="A flat lay of a halved purple ube, a partially peeled yuzu, a bowl of whisked matcha and a bamboo chasen, arranged on dark slate."

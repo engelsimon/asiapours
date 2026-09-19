@@ -47,7 +47,15 @@ const ogImageURL = new URL(image, Astro.site);
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageURL} />
 	</head>
-	<body class="bg-slate text-bone font-serif antialiased">
+	{/* A flex column of exactly one viewport, with main taking up the slack.
+	    Two things fall out of it. The footer stays at the bottom on pages too
+	    short to fill the screen, instead of riding up under the content. And a
+	    section can ask for the full remaining height with `min-h-full` and get
+	    the screen minus the header, rather than the screen, which is what the
+	    home page hero needs: measured against the whole viewport it centers its
+	    content a header's worth too low and pushes the photo caption onto the
+	    fold. */}
+	<body class="bg-slate text-bone font-serif antialiased min-h-dvh flex flex-col">
 		<a
 			href="#content"
 			class="font-label sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-brass focus:text-slate focus:px-4 focus:py-2 text-xs"
@@ -55,7 +63,7 @@ const ogImageURL = new URL(image, Astro.site);
 			Skip to content
 		</a>
 		<Header />
-		<main id="content">
+		<main id="content" class="flex-1">
 			<slot />
 		</main>
 		<Footer />
