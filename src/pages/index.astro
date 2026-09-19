@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Figure from '../components/Figure.astro';
 import Hairline from '../components/Hairline.astro';
 import BookletDownload from '../components/BookletDownload.astro';
+import IngredientMark from '../components/IngredientMark.astro';
 
 const lessons = [
 	{
@@ -90,7 +91,7 @@ const comparisonRows = [
 	<section class="min-h-full flex items-center border-b border-rule">
 		<div class="mx-auto max-w-4xl px-6 py-12 flex flex-col items-center text-center gap-6">
 			<h1 class="font-label text-3xl sm:text-4xl text-bone tracking-[0.2em]">Asia Pours</h1>
-			<p class="font-serif text-xl sm:text-2xl text-ash max-w-xl">
+			<p class="font-serif text-xl sm:text-2xl lg:text-3xl text-ash max-w-xl lg:max-w-2xl">
 				A root, a fruit, a leaf. Three ingredients and the Asia behind them.
 			</p>
 			<nav aria-label="Ingredients" class="flex items-center gap-6">
@@ -103,16 +104,17 @@ const comparisonRows = [
 					</a>
 				))}
 			</nav>
-			{/* Above the photograph, not below it. The hero is min-h-screen and the
-			    photograph already runs past the fold on a phone, so a download
-			    placed after it would only be visible to a reader who had already
-			    decided to scroll. */}
-			<BookletDownload label="Download the booklet" />
-			{/* Sized so the hero, header included, clears a 13 inch laptop. At the
-			    old 20rem the caption landed exactly on the fold and was sliced in
-			    half, which reads as a broken page rather than as an invitation to
-			    scroll. */}
-			<div class="w-full max-w-[15rem] sm:max-w-[16rem]">
+			{/* No booklet download here. A solid brass button as the first thing a
+			    reader meets asks for the transaction before making the case, which
+			    reads as a landing page rather than as a piece of writing. The ask
+			    belongs at the end, in the closing band, where it follows the
+			    argument instead of preceding it. Removing it also gives the
+			    photograph back the room it needs.
+
+			    Sized against the fold: the hero including the header has to clear a
+			    13 inch laptop, so the figure grows to 20rem rather than as far as it
+			    would like to. */}
+			<div class="w-full max-w-[17rem] sm:max-w-[20rem]">
 				<Figure
 					src="/images/hero.jpg"
 					alt="A flat lay of a halved purple ube, a partially peeled yuzu, a bowl of whisked matcha and a bamboo chasen, arranged on dark slate."
@@ -125,21 +127,26 @@ const comparisonRows = [
 	</section>
 
 	<!-- The premise -->
-	<section class="mx-auto max-w-2xl px-6 py-20 flex flex-col gap-6">
-		<p class="text-base leading-relaxed text-bone">
+	{/* The column grows and the type grows with it. Widening alone would push
+	    the measure past the point where the eye loses the start of the next
+	    line, so `lg` buys 48rem of column but spends it at 18px rather than
+	    16px, which keeps the line around 75 characters, the usual upper bound.
+	    A large display gets a bigger page, not a longer line. */}
+	<section class="mx-auto max-w-2xl lg:max-w-3xl px-6 py-20 lg:py-24 flex flex-col gap-6">
+		<p class="text-base lg:text-lg leading-relaxed text-bone">
 			You can try to read your way into a culture on the flight to Singapore. I found out the
 			easier way is to order well. A drink is small enough to finish and specific enough to mean
 			something. It names a place, a season, a farm and a trade route, and it does all of that in
 			the time it takes to break the ice with the person across the table. Nobody has ever bonded
 			over a slide deck.
 		</p>
-		<p class="text-base leading-relaxed text-bone">
+		<p class="text-base lg:text-lg leading-relaxed text-bone">
 			This booklet treats a cocktail as the smallest usable unit of cultural fluency. Each of the
 			three ingredients here carries a story that ends in a supply chain question your counterpart
 			in Manila, Osaka or Kyoto is dealing with right now. The drink is the entry point. The story
 			is what makes it memorable.
 		</p>
-		<p class="text-base leading-relaxed text-bone">
+		<p class="text-base lg:text-lg leading-relaxed text-bone">
 			Every recipe comes in a version with alcohol, and every chapter closes with one that has
 			none. Half the drinks in this book are zero proof. That is not a concession. Some of the
 			best flavor work in Asian bars right now happens without a drop of spirit.
@@ -147,11 +154,17 @@ const comparisonRows = [
 	</section>
 
 	<!-- Three ingredients, three lessons -->
-	<section id="ingredients" class="mx-auto max-w-6xl px-6 py-20 flex flex-col gap-10">
+	<section id="ingredients" class="mx-auto max-w-6xl xl:max-w-7xl px-6 py-20 lg:py-24 flex flex-col gap-10">
 		<h2 class="font-label text-xs text-ash">Three ingredients, three lessons</h2>
 		<div class="grid gap-8 sm:grid-cols-3">
 			{lessons.map((item) => (
 				<div id={item.id} class:list={['bg-stone border-l-[3px] px-6 py-6 flex flex-col gap-3 scroll-mt-24', accentBorder[item.accent]]}>
+					{/* The mark takes the card's accent through `currentColor`, so the
+					    color is declared once on the wrapper and the drawing follows
+					    it. Pulled left by a hair because the yam and the bowl both
+					    start with stroke rather than whitespace, and sitting flush
+					    they read as indented against the labels below. */}
+					<IngredientMark name={item.accent} size={76} class:list={['-ml-1', accentText[item.accent]]} />
 					<p class:list={['font-label text-xs', accentText[item.accent]]}>{item.name}</p>
 					<p class="font-serif text-xl text-bone">{item.lesson}</p>
 					<p class="text-sm text-ash leading-relaxed">{item.blurb}</p>
@@ -164,7 +177,7 @@ const comparisonRows = [
 	</section>
 
 	<!-- Comparison table -->
-	<section class="mx-auto max-w-6xl px-6 py-20 flex flex-col gap-8">
+	<section class="mx-auto max-w-6xl xl:max-w-7xl px-6 py-20 lg:py-24 flex flex-col gap-8">
 		<h2 class="font-label text-xs text-ash">The short version</h2>
 
 		<!-- Desktop / tablet: table, horizontal hairlines only -->
@@ -210,7 +223,7 @@ const comparisonRows = [
 	<Hairline />
 
 	<!-- Closing band -->
-	<section class="mx-auto max-w-6xl px-6 py-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+	<section class="mx-auto max-w-6xl xl:max-w-7xl px-6 py-20 lg:py-24 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
 		<p class="font-serif text-xl text-bone max-w-md">
 			Six cocktails, three chapters, one argument about how origin, value and control interact
 			across Asian trade.

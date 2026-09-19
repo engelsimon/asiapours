@@ -27,7 +27,11 @@ const accentText = {
 ---
 
 <BaseLayout title={title} description={flavorDescription}>
-	<article class="mx-auto max-w-2xl px-6 py-16 flex flex-col gap-10">
+	{/* Same bargain as the home page premise: a large display buys a wider
+	    column, but the extra width is spent on bigger type rather than on a
+	    longer line, so the measure stays near 75 characters instead of running
+	    to the ninety-odd that 48rem at 16px would give. */}
+	<article class="mx-auto max-w-2xl lg:max-w-3xl px-6 py-16 lg:py-20 flex flex-col gap-10">
 		<header class="flex flex-col gap-4">
 			<Eyebrow accent={accent}>Chapter {chapterNumber} &middot; {place}</Eyebrow>
 			<PageTitle>
@@ -40,7 +44,7 @@ const accentText = {
 
 		<Hairline />
 
-		<div class="chapter-body flex flex-col gap-6 text-base leading-relaxed text-bone">
+		<div class="chapter-body flex flex-col gap-6 text-base lg:text-lg leading-relaxed text-bone">
 			<Content />
 		</div>
 
