@@ -1,2 +1,6 @@
 node_modules
 .env
+
+# Copied from node_modules by scripts/copy-maplibre-worker.mjs on predev and
+# prebuild. Generated output, tracks the installed maplibre-gl version.
+public/vendor/maplibre/

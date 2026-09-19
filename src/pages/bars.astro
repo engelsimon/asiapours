@@ -8,6 +8,14 @@ import Hairline from '../components/Hairline.astro';
 import Callout from '../components/Callout.astro';
 import Figure from '../components/Figure.astro';
 
+// Imported here rather than inside the `<script>` below purely for cascade
+// order. A stylesheet imported from a client script is injected at runtime,
+// after the page's own styles, so MapLibre's white popup and white attribution
+// bar won every tie against the overrides at the bottom of this file. From the
+// frontmatter it is hoisted into the page stylesheet ahead of them, and it
+// still only ships on this page.
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 const allBars = await getCollection('bars');
 const bars = [...allBars].sort((a, b) => (a.data.rank ?? Infinity) - (b.data.rank ?? Infinity));
 
@@ -96,15 +104,37 @@ const citySections = cityOrder.map((city) => ({
 	bars: barsByCity.get(city)!,
 }));
 
-const mapData = bars.map((b) => ({
-	slug: b.data.slug,
-	name: b.data.name,
-	city: b.data.city,
-	country: b.data.country,
-	rank: b.data.rank ?? null,
-	lat: b.data.lat,
-	lng: b.data.lng,
-}));
+const citySlug = (city: string) => city.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+// One pin per city, not one per bar. Three of Tokyo's bars sit within four
+// kilometers of each other, so at any zoom that shows the whole region their
+// pins overlap into a single blob, and zooming far enough to separate them
+// loses the continent that is the point of the map. A city pin also matches
+// how the page below is organized, so clicking one lands on a real section
+// rather than somewhere mid list. The individual bars are named in the popup.
+//
+// The pin sits at the mean of its bars, which is a centroid and not a claim
+// about where the city center is.
+const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
+const cityPoints = citySections
+	.map((section) => {
+		const located = section.bars.filter((b) => isNum(b.data.lat) && isNum(b.data.lng));
+		if (located.length === 0) return null;
+		return {
+			id: citySlug(section.city),
+			city: section.city,
+			country: section.country,
+			lat: located.reduce((s, b) => s + (b.data.lat as number), 0) / located.length,
+			lng: located.reduce((s, b) => s + (b.data.lng as number), 0) / located.length,
+			bars: section.bars.map((b) => ({
+				id: b.data.slug,
+				name: b.data.name,
+				rank: b.data.rank ?? null,
+			})),
+		};
+	})
+	.filter((p) => p !== null);
 ---
 
 <BaseLayout
@@ -124,17 +154,29 @@ const mapData = bars.map((b) => ({
 
 		<Hairline />
 
-		<div id="bars-map" class="w-full h-[420px] bg-stone border border-rule" role="img" aria-label="Map of bars featured on this page"></div>
-		<p id="bars-map-fallback" class="text-sm text-mist hidden">
-			No bar on this list has confirmed coordinates yet, so the map has no pins to show. Coordinates
-			will appear here as they are added to each bar's entry.
-		</p>
+		{/* The map is decoration over content that already exists in full below,
+		    so it is hidden from assistive technology rather than given an
+		    `img` role and a label that could never describe it adequately. A
+		    screen reader gets the city headings and the bar cards, which carry
+		    the addresses the map only approximates. */}
+		<div class="flex flex-col gap-2">
+			<div
+				id="bars-map"
+				class="w-full h-[380px] sm:h-[460px] bg-stone border border-rule"
+				aria-hidden="true"
+			></div>
+			<p id="bars-map-fallback" class="text-sm text-mist hidden">
+				The map could not be loaded. Every bar is listed below with its address.
+			</p>
+		</div>
 
 		<Callout label="A note on this list">
 			<p>
 				Rankings, names, addresses, house descriptions and named drinks come from The World's 50
-				Best Bars 2025 (the50.com). Map pins are geocoded from each published street address using
-				OpenStreetMap Nominatim, so a pin marks the building or the street, not the door. Three
+				Best Bars 2025 (the50.com). Each address is geocoded with OpenStreetMap Nominatim, and the
+				map carries one pin per city rather than per bar: three of the Tokyo entries sit within a
+				few kilometers of each other and would otherwise overlap into a single smudge. Click a pin
+				for the bars in that city. The street address for each one is on its card below. Three
 				bars, Bar Us, Hope &amp; Sesame and The Bellwood, carry no signature cocktail here because
 				their published entries name no single drink.
 			</p>
@@ -148,7 +190,7 @@ const mapData = bars.map((b) => ({
 		</Callout>
 
 		{citySections.map((section) => (
-		<section class="flex flex-col gap-6">
+		<section id={`city-${citySlug(section.city)}`} class="flex flex-col gap-6 scroll-mt-24">
 			<div class="flex flex-col gap-4">
 				<div class="flex items-baseline justify-between gap-4 border-b border-brass pb-2">
 					<h2 class="font-label text-sm text-brass">{section.city}</h2>
@@ -177,7 +219,7 @@ const mapData = bars.map((b) => ({
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
 			{section.bars.map((bar) => (
-				<div class="flex flex-col gap-3 border border-rule bg-stone p-6">
+				<div id={`bar-${bar.data.slug}`} class="flex flex-col gap-3 border border-rule bg-stone p-6 scroll-mt-24">
 					{bar.data.image ? (
 						<Figure
 							src={bar.data.image.src}
@@ -234,75 +276,325 @@ const mapData = bars.map((b) => ({
 	</article>
 </BaseLayout>
 
-<script
-	define:vars={{ mapData }}
->
-	window.__barsData = mapData;
+<script define:vars={{ cityPoints }}>
+	window.__cityPoints = cityPoints;
 </script>
 
 <script>
-	// Renders pins only for bars with finite lat/lng, so a future entry added
-	// without coordinates degrades to the fallback note instead of plotting a
-	// wrong location.
-	import 'leaflet/dist/leaflet.css';
-	import * as L from 'leaflet';
+	// The map is progressive enhancement. Everything it shows exists as text
+	// below it, so every failure path here ends in "reveal the note and stop",
+	// never in a half drawn map or a thrown error in the console.
+	// The stylesheet is imported from the frontmatter, not here: see the note
+	// there about cascade order.
+	// Named imports, not a default: maplibre-gl 6 dropped the default export.
+	import {
+		Map,
+		Marker,
+		Popup,
+		LngLatBounds,
+		NavigationControl,
+		AttributionControl,
+		setWorkerUrl,
+	} from 'maplibre-gl';
+	import { mapStyle } from '../lib/map-style';
 
-	type BarPoint = {
-		slug: string;
-		name: string;
+	type CityPoint = {
+		id: string;
 		city: string;
 		country: string;
-		rank: number | null;
-		lat: unknown;
-		lng: unknown;
+		lat: number;
+		lng: number;
+		bars: { id: string; name: string; rank: number | null }[];
 	};
 
-	function isFiniteCoord(v: unknown): v is number {
-		return typeof v === 'number' && Number.isFinite(v);
+	// A pin in the site's line language: round joins, `currentColor`, stroked
+	// and not filled at rest. Brass fill is reserved for the booklet download,
+	// the one control on the site allowed to look like a button, so the pin
+	// carries a brass outline over a slate body and only takes a brass fill on
+	// hover and focus, which the design rules allow as a transient state.
+	const PIN = `
+		<svg width="26" height="34" viewBox="0 0 26 34" fill="none"
+		     stroke="currentColor" stroke-width="2"
+		     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<path class="pin-body"
+			      d="M13 32.5 C13 32.5 23.5 19 23.5 12 A10.5 10.5 0 1 0 2.5 12 C2.5 19 13 32.5 13 32.5 Z" />
+			<circle class="pin-eye" cx="13" cy="12" r="3.75" />
+		</svg>`;
+
+	function scrollToCity(id: string) {
+		const target = document.getElementById(`city-${id}`);
+		if (!target) return;
+		// Honors a reduced motion preference: the jump still happens, the
+		// animation does not.
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
 	}
 
+	function popupHtml(point: CityPoint) {
+		const heading = point.country !== point.city ? `${point.city}, ${point.country}` : point.city;
+		const items = point.bars
+			.map((bar) => {
+				const rank = bar.rank ? `<span class="ap-rank">No. ${bar.rank}</span>` : '';
+				return `<li><a href="#bar-${bar.id}">${bar.name}</a>${rank}</li>`;
+			})
+			.join('');
+		return `<p class="ap-popup-city">${heading}</p><ul class="ap-popup-list">${items}</ul>`;
+	}
+
+	// Point MapLibre at the worker copied into public/ by
+	// scripts/copy-maplibre-worker.mjs. Without this the library asks for a
+	// sibling file of its own bundled chunk, which the bundler never emits, and
+	// tile parsing dies with no error at all: the map draws its background and
+	// nothing else. See the script for the full account.
+	setWorkerUrl('/vendor/maplibre/maplibre-gl-worker.mjs');
+
 	function initMap() {
-		const bars: BarPoint[] = (window as unknown as { __barsData: BarPoint[] }).__barsData ?? [];
-		const plottable = bars.filter((b) => isFiniteCoord(b.lat) && isFiniteCoord(b.lng));
+		const points: CityPoint[] = (window as unknown as { __cityPoints?: CityPoint[] }).__cityPoints ?? [];
+		const mapEl = document.getElementById('bars-map');
+		const fallback = document.getElementById('bars-map-fallback');
+		if (!mapEl || !fallback) return;
 
-		const mapEl = document.getElementById('bars-map') as HTMLElement;
-		const fallback = document.getElementById('bars-map-fallback') as HTMLElement;
-
-		if (plottable.length === 0) {
+		const fail = () => {
 			mapEl.classList.add('hidden');
 			fallback.classList.remove('hidden');
-			return;
+		};
+
+		if (points.length === 0) return fail();
+
+		// WebGL 2 is required and is not universally available: it is off in
+		// some hardened browser configurations and absent in others. maplibre 6
+		// removed its own `supported()` helper, so this probes directly and
+		// turns a thrown constructor into the text fallback.
+		try {
+			if (!document.createElement('canvas').getContext('webgl2')) return fail();
+		} catch {
+			return fail();
 		}
 
-		const map = L.map(mapEl, { scrollWheelZoom: false });
+		let map: Map;
+		try {
+			map = new Map({
+				container: mapEl,
+				style: mapStyle,
+				// Zoom on a trackpad or wheel needs ctrl held, and MapLibre shows
+				// its own overlay saying so. Without this the map swallows the
+				// page scroll and traps the reader, which is the single most
+				// common complaint about an embedded map. Two finger pinch and
+				// the zoom buttons are unaffected.
+				cooperativeGestures: true,
+				attributionControl: false,
+				// Nothing on this map rewards a close look, and the tiles stop at
+				// 14 in any case.
+				maxZoom: 12,
+				minZoom: 1,
+				// The style has no terrain, buildings or 3D anything, so tilt and
+				// rotation would only ever leave the reader lost.
+				pitchWithRotate: false,
+				dragRotate: false,
+				touchZoomRotate: false,
+			});
+		} catch {
+			return fail();
+		}
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-			maxZoom: 18,
-		}).addTo(map);
-
-		const brassIcon = L.divIcon({
-			className: '',
-			html: '<span style="display:block;width:12px;height:12px;border-radius:50%;background:#C9A55F;border:2px solid #15191F;"></span>',
-			iconSize: [12, 12],
-			iconAnchor: [6, 6],
+		map.on('error', (e) => {
+			// A single tile failing is not worth tearing the map down; a failure
+			// to load the style or the source is.
+			if (!map.isStyleLoaded()) fail();
+			else console.warn('[bars map]', e?.error?.message ?? e);
 		});
 
-		const latLngs: [number, number][] = [];
+		map.touchZoomRotate.disableRotation();
 
-		for (const bar of plottable) {
-			const point: [number, number] = [bar.lat as number, bar.lng as number];
-			latLngs.push(point);
-			const rankLine = bar.rank ? `<br>No. ${bar.rank}, The World's 50 Best Bars 2025` : '';
-			L.marker(point, { icon: brassIcon })
-				.addTo(map)
-				.bindPopup(`<strong>${bar.name}</strong><br>${bar.city}, ${bar.country}${rankLine}`);
+		map.addControl(
+			new AttributionControl({
+				compact: true,
+				customAttribution:
+					'<a href="https://openfreemap.org" rel="noopener">OpenFreeMap</a> &middot; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>',
+			}),
+			'bottom-right',
+		);
+		map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
+
+		for (const point of points) {
+			// A real button, not a styled div. The pins are the one part of the
+			// map that is interactive, so they are reachable by keyboard and
+			// announced properly even though the map itself is aria-hidden.
+			const el = document.createElement('button');
+			el.type = 'button';
+			el.className = 'ap-pin';
+			el.innerHTML = PIN;
+			const count = point.bars.length;
+			el.setAttribute(
+				'aria-label',
+				`${point.city}, ${count} ${count === 1 ? 'bar' : 'bars'}. Jump to the ${point.city} section.`,
+			);
+
+			const popup = new Popup({
+				offset: 30,
+				closeButton: false,
+				maxWidth: '240px',
+			}).setHTML(popupHtml(point));
+
+			new Marker({ element: el, anchor: 'bottom' })
+				.setLngLat([point.lng, point.lat])
+				.setPopup(popup)
+				.addTo(map);
+
+			el.addEventListener('click', () => scrollToCity(point.id));
 		}
 
-		// Frame every pin rather than guessing a zoom level, so adding a bar
-		// outside Asia later (Hamburg, and whatever follows) still fits.
-		map.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40] });
+		// Frame every pin rather than hardcoding a center and zoom, so adding a
+		// bar outside Asia later (Hamburg, and whatever follows) still fits
+		// without touching this file. The corners are computed here rather than
+		// accumulated through `LngLatBounds.extend`, which silently produced an
+		// empty box and left the map pinned at its maximum zoom.
+		const lngs = points.map((p) => p.lng);
+		const lats = points.map((p) => p.lat);
+		const bounds = new LngLatBounds(
+			[Math.min(...lngs), Math.min(...lats)],
+			[Math.max(...lngs), Math.max(...lats)],
+		);
+
+		// Top padding clears the zoom buttons, bottom clears the attribution.
+		map.fitBounds(bounds, { padding: { top: 56, right: 56, bottom: 48, left: 56 }, maxZoom: 5, animate: false });
 	}
 
 	initMap();
 </script>
+
+<style is:global>
+	/* MapLibre ships a light UI: white controls, a white popup with a white
+	   tip, black-on-white attribution. None of it survives on a slate page, so
+	   the handful of chrome elements this map actually uses are restated in
+	   brand tokens. `is:global` because these nodes are created by the library
+	   at runtime and never carry Astro's scoping attribute. */
+
+	.ap-pin {
+		display: block;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+		color: var(--color-brass);
+		/* The body is slate so the pin reads as a solid object against water or
+		   land, while the stroke stays the only brass at rest. */
+		--pin-fill: var(--color-slate);
+	}
+	.ap-pin svg .pin-body {
+		fill: var(--pin-fill);
+	}
+	.ap-pin svg .pin-eye {
+		fill: none;
+	}
+	.ap-pin:hover,
+	.ap-pin:focus-visible {
+		--pin-fill: var(--color-brass);
+		color: var(--color-brass);
+	}
+	.ap-pin:hover svg .pin-eye,
+	.ap-pin:focus-visible svg .pin-eye {
+		fill: var(--color-slate);
+		stroke: var(--color-slate);
+	}
+	.ap-pin:focus-visible {
+		outline: 2px solid var(--color-bone);
+		outline-offset: 3px;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.ap-pin svg {
+			transition: transform 150ms ease;
+		}
+		.ap-pin:hover svg,
+		.ap-pin:focus-visible svg {
+			transform: translateY(-2px);
+		}
+	}
+
+	.maplibregl-popup-content {
+		background: var(--color-stone);
+		border: 1px solid var(--color-rule);
+		border-radius: 2px;
+		box-shadow: none;
+		padding: 0.75rem 0.875rem;
+		font-family: var(--font-serif);
+	}
+	.maplibregl-popup-tip {
+		display: none;
+	}
+	.ap-popup-city {
+		font-family: var(--font-sans);
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		font-size: 0.6875rem;
+		color: var(--color-brass);
+		margin: 0 0 0.5rem;
+	}
+	.ap-popup-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+	}
+	.ap-popup-list a {
+		color: var(--color-bone);
+		font-size: 0.875rem;
+		text-decoration: none;
+	}
+	.ap-popup-list a:hover {
+		color: var(--color-brass);
+	}
+	.ap-popup-list .ap-rank {
+		font-family: var(--font-sans);
+		font-size: 0.625rem;
+		letter-spacing: 0.1em;
+		color: var(--color-mist);
+		margin-left: 0.5rem;
+	}
+
+	.maplibregl-ctrl-group {
+		background: var(--color-stone);
+		border: 1px solid var(--color-rule);
+		border-radius: 2px;
+		box-shadow: none;
+	}
+	.maplibregl-ctrl-group button + button {
+		border-top: 1px solid var(--color-rule);
+	}
+	.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+		/* The control glyphs are baked-in dark SVG data URIs. Inverting is the
+		   only way to light them without shipping replacement icons. */
+		filter: invert(1);
+		opacity: 0.7;
+	}
+	.maplibregl-ctrl-group button:hover .maplibregl-ctrl-icon {
+		opacity: 1;
+	}
+	/* Both classes, because MapLibre sets the white background with
+	   `.maplibregl-ctrl.maplibregl-ctrl-attrib` and a single class loses the
+	   tie however late it is declared. */
+	.maplibregl-ctrl.maplibregl-ctrl-attrib {
+		background: color-mix(in srgb, var(--color-slate) 85%, transparent);
+	}
+	.maplibregl-ctrl-attrib,
+	.maplibregl-ctrl-attrib a {
+		color: var(--color-mist);
+		font-size: 0.625rem;
+	}
+	.maplibregl-ctrl-attrib-button {
+		filter: invert(1);
+		opacity: 0.6;
+	}
+
+	/* The cooperative gesture overlay: "use ctrl + scroll to zoom the map". */
+	.maplibregl-cooperative-gesture-screen {
+		background: color-mix(in srgb, var(--color-slate) 75%, transparent);
+		font-family: var(--font-sans);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-size: 0.75rem;
+		color: var(--color-bone);
+	}
+</style>
