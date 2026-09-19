@@ -1,0 +1,64 @@
+---
+import { statSync } from 'node:fs';
+import { resolve } from 'node:path';
+import NavIcon from './NavIcon.astro';
+
+// The one loud element on the site. Brass is otherwise reserved for hairlines
+// and small labels, and a solid brass fill is a deliberate exception to that
+// rule, recorded in CLAUDE.md so it is not read as licence to start filling
+// other surfaces with it. The exception earns its keep by being singular: the
+// booklet is the only thing the site actually asks the reader to take away,
+// and there is exactly one control on the site that looks like this.
+//
+// Slate on brass measures 7.58:1, which clears WCAG AAA, so the loudness costs
+// nothing in contrast.
+
+interface Props {
+	// The home page and the about page introduce the booklet differently, so
+	// the surrounding copy is passed in rather than fixed here.
+	label?: string;
+	class?: string;
+}
+
+const { label = 'Download the booklet', class: className } = Astro.props;
+
+// Read off the file at build time. This number was previously a literal,
+// 753311, typed into two separate pages. That is precisely how a figure goes
+// stale: replace the PDF and both pages carry on announcing the weight of a
+// file that no longer exists. Reading the real file means it cannot drift, and
+// a missing PDF becomes a build failure rather than a confident wrong number.
+// Resolved from the project root, not from import.meta.url. This component is
+// bundled into dist/.prerender/chunks/ before it runs, so a path relative to
+// the module resolves against the chunk and the build fails with ENOENT while
+// dev works fine. Astro runs both from the project root, so cwd is the one
+// anchor that holds in both.
+const sizeKB = Math.round(statSync(resolve('public/Asia_Pours_Booklet.pdf')).size / 1024);
+---
+
+<a
+	href="/Asia_Pours_Booklet.pdf"
+	download
+	class:list={[
+		'inline-flex items-center gap-4 bg-brass text-slate rounded-sm px-6 py-4',
+		'hover:opacity-90 transition-opacity',
+		// The global focus ring is brass, which would be invisible against a
+		// brass button. Bone keeps the ring legible without weakening the
+		// site-wide convention everywhere else.
+		'focus-visible:outline-bone',
+		className,
+	]}
+>
+	<span class="flex flex-col gap-1">
+		<span class="font-label text-xs">{label}</span>
+		{/* Size and format stated up front: the reader is about to spend data on
+		    this, and a download that does not say what it weighs is a small
+		    discourtesy.
+
+		    The alpha is 80 and not lower. At 70 this line measures 4.2:1
+		    against the brass, which fails AA for text this small; 80 gives
+		    5.3:1. Anything that dims it further to look more like metadata
+		    fails the same check. */}
+		<span class="font-label text-[0.625rem] text-slate/80">PDF, {sizeKB} KB</span>
+	</span>
+	<NavIcon name="download" size={18} class="shrink-0" />
+</a>

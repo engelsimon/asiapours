@@ -2,8 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Figure from '../components/Figure.astro';
 import Hairline from '../components/Hairline.astro';
-
-const bookletSizeKB = Math.round(753311 / 1024);
+import BookletDownload from '../components/BookletDownload.astro';
 
 const lessons = [
 	{
@@ -92,6 +91,11 @@ const comparisonRows = [
 					</a>
 				))}
 			</nav>
+			{/* Above the photograph, not below it. The hero is min-h-screen and the
+			    photograph already runs past the fold on a phone, so a download
+			    placed after it would only be visible to a reader who had already
+			    decided to scroll. */}
+			<BookletDownload label="Download the booklet" />
 			<div class="w-full max-w-xs">
 				<Figure
 					src="/images/hero.jpg"
@@ -196,12 +200,12 @@ const comparisonRows = [
 			across Asian trade.
 		</p>
 		<div class="flex flex-wrap items-center gap-6">
-			<a href="/recipes" class="font-label text-xs text-brass hover:opacity-75 transition-opacity">
+			{/* The recipes link steps back to plain text here. Two brass elements
+			    side by side would compete, and the booklet is the ask. */}
+			<a href="/recipes" class="font-label text-xs text-ash hover:text-brass transition-colors">
 				See the recipes &rarr;
 			</a>
-			<a href="/Asia_Pours_Booklet.pdf" class="font-label text-xs text-steel hover:opacity-75 transition-opacity">
-				Download the booklet (PDF, {bookletSizeKB} KB) &rarr;
-			</a>
+			<BookletDownload label="Download the booklet" />
 		</div>
 	</section>
 </BaseLayout>
