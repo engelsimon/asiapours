@@ -79,7 +79,20 @@ in `src/styles/global.css`. No Google Fonts CDN.
 
 - Ranged left, never justified. Centered only on the hero.
 - One ingredient accent color per page section, taken from that ingredient.
-- Brass for hairlines and small labels only.
+- Brass for hairlines and small labels only. Brass may also fill a surface in a
+  transient state, which is why the skip link in `BaseLayout.astro` goes brass
+  on focus and the finder buttons in `finder.astro` go brass on hover: the fill
+  is a response to the user, not the resting appearance.
+- One element is allowed a brass fill **at rest**: the booklet download,
+  `src/components/BookletDownload.astro`, solid brass with slate text. The
+  booklet is the single thing the site asks a reader to take away, so it is the
+  single control that looks like a button, and the exception only works while
+  it stays the only one. Anything else wanting emphasis takes a brass hairline,
+  a stone panel, or an ash-to-brass hover, not a fill. Slate on brass measures
+  7.58:1, clearing WCAG AAA. The focus ring on it is bone rather than the
+  site-wide brass, which would be invisible against a brass surface, and the
+  size line is `text-slate/80` because at `/70` it drops to 4.2:1 and fails AA
+  at that size.
 - Generous whitespace. No drop shadows, no gradients, no rounded corners beyond
   2px (`--radius-*` is capped at 2px in the theme), no icon sets, no stock
   illustration.

@@ -5,8 +5,7 @@ import PageTitle from '../components/PageTitle.astro';
 import Deck from '../components/Deck.astro';
 import Hairline from '../components/Hairline.astro';
 import Callout from '../components/Callout.astro';
-
-const bookletSizeKB = Math.round(753311 / 1024);
+import BookletDownload from '../components/BookletDownload.astro';
 ---
 
 <BaseLayout title="About" description="About Asia Pours: the author, the project, and full disclosure on the use of AI in its research, writing and photography.">
@@ -96,14 +95,9 @@ const bookletSizeKB = Math.round(753311 / 1024);
 					The site draws on the full printed booklet, which includes additional figures and
 					sourcing detail not reproduced here.
 				</p>
-				<p>
-					<a
-						href="/Asia_Pours_Booklet.pdf"
-						class="font-label text-xs text-steel hover:opacity-75 transition-opacity"
-					>
-						Download the booklet (PDF, {bookletSizeKB} KB) &rarr;
-					</a>
-				</p>
+				<div>
+					<BookletDownload label="Download the booklet" />
+				</div>
 			</section>
 		</div>
 	</article>

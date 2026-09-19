@@ -16,8 +16,13 @@
 //     chapter weighs three cases against each other, and a balance stays
 //     legible at 14px where punctuation glyphs turn to mush.
 
+// `download` is not a nav item. It lives here anyway because CLAUDE.md names
+// this file as the home for every icon drawn by hand for the site, and one
+// stray SVG inlined in a button is how a second, undocumented icon style
+// starts.
+
 interface Props {
-	name: 'ingredients' | 'recipes' | 'bars' | 'argument' | 'sources' | 'finder';
+	name: 'ingredients' | 'recipes' | 'bars' | 'argument' | 'sources' | 'finder' | 'download';
 	size?: number;
 	class?: string;
 }
@@ -94,6 +99,18 @@ const { name, size = 14, class: className } = Astro.props;
 		<>
 			<circle cx="7.1" cy="7.1" r="4.1" />
 			<path d="M10.2 10.2 L13.6 13.6" />
+		</>
+	)}
+
+	{/* Arrow descending into an open tray. The tray is drawn as two uprights
+	    and a floor rather than a closed rectangle, so the shaft has somewhere
+	    to land: a full box reads as an inbox, and the arrow then looks like it
+	    is pointing at a lid. */}
+	{name === 'download' && (
+		<>
+			<path d="M8 2.6 V9.8" />
+			<path d="M5 7 L8 10 L11 7" />
+			<path d="M2.8 11.2 V13.4 H13.2 V11.2" />
 		</>
 	)}
 </svg>

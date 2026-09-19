@@ -95,14 +95,23 @@ const navLinks = [
 		iconClose.classList.add('hidden');
 	}
 
+	// Focus deliberately stays on the toggle. This is a disclosure, not a modal
+	// dialog, and the ARIA practices for a disclosure keep focus on the button
+	// that controls it: the panel opens directly after the button in the DOM, so
+	// the next Tab reaches the first link anyway and nothing is stranded.
+	//
+	// Moving focus into the panel is also what produced the stray outline on
+	// mobile. Safari draws a focus ring for scripted .focus() even when the menu
+	// was opened by a tap, and that ring sat around the first link until the next
+	// tap cleared it. The ring itself is correct behavior for keyboard users, so
+	// the fix is not to suppress the outline, which would cost real keyboard
+	// visibility, but to stop taking focus that the user never asked for.
 	function openMenu() {
 		panel.classList.remove('hidden');
 		toggle.setAttribute('aria-expanded', 'true');
 		toggle.setAttribute('aria-label', 'Close menu');
 		iconOpen.classList.add('hidden');
 		iconClose.classList.remove('hidden');
-		const firstLink = panel.querySelector('a');
-		(firstLink as HTMLAnchorElement | null)?.focus();
 	}
 
 	toggle.addEventListener('click', () => {
@@ -110,13 +119,9 @@ const navLinks = [
 		expanded ? closeMenu() : openMenu();
 	});
 
-	panel.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape') {
-			closeMenu();
-			toggle.focus();
-		}
-	});
-
+	// One Escape handler on the document, not two. It catches presses whether
+	// focus sits on the toggle or has tabbed into the panel, since the events
+	// bubble either way.
 	document.addEventListener('keydown', (e) => {
 		if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
 			closeMenu();
